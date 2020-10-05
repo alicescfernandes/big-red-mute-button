@@ -1,4 +1,5 @@
 # Big Red Mute Button
+![](https://www.google-analytics.com/collect?v=1&t=event&tid=UA-100869248-2&cid=555&ec=github&ea=pageview&el=big-red-mute-button&ev=1)
 
 ### Mute that mic with Javascript and custom hardware!
 
