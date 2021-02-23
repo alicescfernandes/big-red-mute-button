@@ -22,12 +22,19 @@ The arduino accepts (over serial) two string values: a '0' and a '1',when is 0 t
 
 Go to any meets, a "Connect" button should now appear. Just click there, pick a device, and you are ready to go
 
+### Attention Mac Users!
+If your system is High Sierra or below you may need to install the CH34X drivers on your mac. [This page](https://github.com/adrianmihalko/ch340g-ch34g-ch34x-mac-os-x-driver) explain how you can install the driver
+
+
 # BOM
-- A Relay
-- Arduino
-- Big red mute button
+- ~~A Relay~~ A 2N2222 Transistor 
+- Arduino (i'm using a chinese version of nano)
+- [Big Dome Pushbutton](https://www.sparkfun.com/products/9181)
 - a X Ohm resistor
-- A 12V battery pack
+- A 12V battery pack or
+- A 9V Battery and a 9V-12v step-up boost converter ((i'm using this one)[https://www.pololu.com/product/2117))
+
+Some parts i've used here are somewhat expensive, so do replace them with cheaper ones. Just keep in mind that the arduino should have serial ports and also HID capabilities.
 
 # TODO:
 - Fritzing & Schematics
