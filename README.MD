@@ -25,7 +25,7 @@ If your system is High Sierra or below you may need to install the CH34X drivers
 
 
 # BOM
-- ~~A Relay~~ A 2N2222 Transistor 
+- ~~A Relay~~ A 2N2222 Transistor (i had a relay on the first draft, but it makes a clicking noise when switching, so i've replaced it with a 2N2222 transistor)
 - Arduino (i'm using a chinese version of nano)
 - [Big Dome Pushbutton](https://www.sparkfun.com/products/9181)
 - a X Ohm resistor
@@ -38,11 +38,6 @@ Some parts i've used here are somewhat expensive, so do replace them with cheape
 - Fritzing & Schematics
 - Moving JS code into an extension
 - Resistor values
-
-# Sugested Upgrades
-- Replace the relay with a MOSFET or a H-Bridge. This is a massive upgrade because it saves space and removes the clicking sound of the relay
-
-
 # References
 - [Web Serial API](https://web.dev/serial/)
 - [Web Serial Codelab](https://codelabs.developers.google.com/codelabs/web-serial/#0)
