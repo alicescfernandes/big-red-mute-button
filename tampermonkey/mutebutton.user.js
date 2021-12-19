@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         Big Red Mute Button Connector
+// @name         Big Red Mute Button - Google Meets Connector
 // @namespace    http://tampermonkey.net/
 // @version      1
 // @description  try to take over the world!
@@ -91,7 +91,7 @@
         port = await window.navigator.serial.requestPort();
 
         await port.open({
-            baudrate: 9600
+            baudRate: 9600
         })
 
         let decoder = new TextDecoderStream();
