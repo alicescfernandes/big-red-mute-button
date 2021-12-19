@@ -13,7 +13,7 @@ The arduino accepts (over serial) two string values: a '0' and a '1',when is 0 t
 - Go to ``chrome://flags`` in your browser and enable the ``#enable-experimental-web-platform-features`` flag
 - Restart the browser
 - Install Tampermonkey extension
-- Install the script of this project  
+- Install the script of this project  (https://github.com/alicescfernandes/big-red-mute-button/raw/master/tampermonkey/mutebutton.user.js)
 - Reload the browser again
 - Plug in your arduino
 - Upload the arduino code of this project
