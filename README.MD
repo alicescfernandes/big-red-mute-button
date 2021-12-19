@@ -24,8 +24,8 @@ Go to any meets, a "Connect" button should now appear. Just click there, pick a 
 If your system is High Sierra or below you may need to install the CH34X drivers on your mac. [This page](https://github.com/adrianmihalko/ch340g-ch34g-ch34x-mac-os-x-driver) explain how you can install the driver
 
 
-# BOM
-- ~~A Relay~~ A 2N2222 Transistor (i had a relay on the first draft, but it makes a clicking noise when switching, so i've replaced it with a 2N2222 transistor)
+# Parts
+- ~~A Relay~~ A IRFZ4N Transistor (i had a relay on the first draft, but it makes a clicking noise when switching, so i've replaced it with a 2N2222 transistor)
 - Arduino (i'm using a chinese version of nano)
 - [Big Dome Pushbutton](https://www.sparkfun.com/products/9181)
 - a X Ohm resistor
