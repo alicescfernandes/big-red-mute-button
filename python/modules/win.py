@@ -20,5 +20,3 @@ def unmute():
     print("win unmute")
     stream = subprocess.run('.\modules\SoundVolumeView.exe /UnMute "DefaultCaptureDevice"')
 
-unmute()
-print(get_mute() == "0")

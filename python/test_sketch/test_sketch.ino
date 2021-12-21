@@ -42,11 +42,12 @@ void loop() {
   prevValue = currentValue;
   currentValue = digitalRead(PIN_BTN);
 
-  boolean timeHasPassed = (currentTime - lastTime) > 500;
-  
+  boolean timeHasPassed = (currentTime - lastTime) > 200;
+
   if(prevValue == 1 && currentValue == 0 && timeHasPassed){
      Serial.println("0");
      lastTime = millis();  
   } 
+  delay(100);
   
 }

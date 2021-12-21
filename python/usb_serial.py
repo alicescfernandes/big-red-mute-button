@@ -1,7 +1,8 @@
 import serial
 import serial.tools.list_ports
 import time
-import io
+import sys
+import getopt
 import mic_control
 #with serial.Serial('/dev/ttyS1', 19200, timeout=1) as ser:
 #    ser.write(b'hello')     # write a string
@@ -55,19 +56,24 @@ class UsbSerial:
       
 
 if __name__ == "__main__":
-    ports = get_ports()
-    for port in ports:
-        print(port.device)
-    mic_device = mic_control.MicControl()
-    serial_device = UsbSerial('COM6');
-    while True:
-        line = serial_device.readLine()
-        if line == serial_device.BUTTON_PRESS:
-            is_muted = mic_device.toggle()
-            if(is_muted):
-                serial_device.turn_on();
-            else:
-                serial_device.turn_off();
+    args = sys.argv[1:]
+    if("--list" in args):
+        ports = get_ports()
+        for port in ports:
+            print(port.device, port.description)
 
-        time.sleep(0.250)
+    elif("--port" in args):
+        index = args.index("--port");
+        mic_device = mic_control.MicControl()
+        serial_device = UsbSerial(args[index+1]);
+        while True:
+            line = serial_device.readLine()
+            if line == serial_device.BUTTON_PRESS:
+                is_muted = mic_device.toggle()
+                if(is_muted):
+                    serial_device.turn_on();
+                else:
+                    serial_device.turn_off();
+
+            time.sleep(0.250)
 
