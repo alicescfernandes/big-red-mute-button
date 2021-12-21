@@ -34,7 +34,7 @@ If your system is High Sierra or below you may need to install the CH34X drivers
 
 
 # Parts
-- ~~A Relay~~ A IRFZ4N Transistor (i had a relay on the first draft, but it makes a clicking noise when switching, so i've replaced it with a 2N2222 transistor)
+- ~~A Relay~~ A IRFZ44N Transistor (i had a relay on the first draft, but it makes a clicking noise when switching, so i've replaced it with a 2N2222 transistor)
 - Arduino (i'm using a chinese version of nano)
 - [Big Dome Pushbutton](https://www.sparkfun.com/products/9181)
 - two 10k Ohm resistor
