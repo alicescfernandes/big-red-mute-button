@@ -13,8 +13,11 @@ class MicControl:
     def toggle(self):
         if(self.is_muted()):
             self.unmute()
+            return False;
         else:
-            self.mute()  
+            self.mute() 
+            return True; 
+
 
     def mute(self):
         ""

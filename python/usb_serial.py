@@ -25,12 +25,12 @@ class UsbSerial:
 
         #TODO: Set the timer to read the line
 
-    def turn_on(ser):
-        ser.write(b'1') # write a string
+    def turn_on(self):
+        self.connection.write(b'1') # write a string
         
 
-    def turn_off(ser):
-        ser.write(b'0') # write a string
+    def turn_off(self):
+        self.connection.write(b'0') # write a string
         
 
     def close(ser):
@@ -59,12 +59,16 @@ if __name__ == "__main__":
     for port in ports:
         print(port.device)
     mic_device = mic_control.MicControl()
-    serial_device = UsbSerial('/dev/cu.usbmodem14401');
+    serial_device = UsbSerial('/dev/cu.usbmodem14301');
     while True:
         line = serial_device.readLine()
-        
+        print(line)
         if line == serial_device.BUTTON_PRESS:
-            mic_device.toggle()
+            is_muted = mic_device.toggle()
+            if(is_muted):
+                serial_device.turn_on();
+            else:
+                serial_device.turn_off();
 
         time.sleep(1)
 
