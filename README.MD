@@ -1,6 +1,6 @@
 # 🔴 Big Red Mute Button
 ![](https://www.google-analytics.com/collect?v=1&t=event&tid=UA-100869248-2&cid=555&ec=github&ea=pageview&el=big-red-mute-button&ev=1)
-### Mute that mic with Javascript and custom hardware!
+## Mute that mic with Javascript and custom hardware!
 [insert image here]
 
 With the release of Chrome 80, a new web API was shipped with the browser. This API allows the browser to communicate via serial with other devices, however is behind a flag. This project makes use of that API to communicate with an Arduino Micro that opens a serial port over USB. Both are set to the 6900 baud rate, so that they can communicate with each other. 
@@ -9,7 +9,8 @@ This makes use Tampermonkey to inject a script that will allow you to connect to
 
 The arduino accepts (over serial) two string values: a '0' and a '1',when is 0 the light is turned off, and when is '1' the light is turned on. It's the browser that tells if the LED is on or off. When you press the "physical" button, the arduino will detect the press and send it over to the browser (by writing a '0' on the console), and the browser will check the current status of the mute, and toggle it.
 
-# Setup
+
+### Setup - Tampermonkey
 - Go to ``chrome://flags`` in your browser and enable the ``#enable-experimental-web-platform-features`` flag
 - Restart the browser
 - Install Tampermonkey extension
@@ -18,7 +19,15 @@ The arduino accepts (over serial) two string values: a '0' and a '1',when is 0 t
 - Plug in your arduino
 - Upload the arduino code of this project
 
-Go to any meets, a "Connect" button should now appear. Just click there, pick a device, and you are ready to go
+## Mute the mic globally (only compatible with OSX) (WIP)
+With the help of some python code we can make the mic mute globally, aplication-wide. To do so, just follow the instructions below.
+
+I'm still working on a GUI to make this a little bit easier to do, ad
+### Setup - Python (only compatible with OSX)
+- `cd python/`
+- `pip3 install -r requirements.txt`
+- Press the button and you should be muted.
+
 
 ### Attention Mac Users!
 If your system is High Sierra or below you may need to install the CH34X drivers on your mac. [This page](https://github.com/adrianmihalko/ch340g-ch34g-ch34x-mac-os-x-driver) explain how you can install the driver
