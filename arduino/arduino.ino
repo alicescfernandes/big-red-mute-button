@@ -13,7 +13,7 @@ unsigned long int lastTime = 0;
 void teste() {
   unsigned long int currentTime = millis();
     if((currentTime - lastTime) > 200){
-       Serial.print(0);
+       Serial.println('0');
        lastTime = millis();
     }
     

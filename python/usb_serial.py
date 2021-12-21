@@ -59,10 +59,9 @@ if __name__ == "__main__":
     for port in ports:
         print(port.device)
     mic_device = mic_control.MicControl()
-    serial_device = UsbSerial('/dev/cu.usbmodem14301');
+    serial_device = UsbSerial('COM6');
     while True:
         line = serial_device.readLine()
-        print(line)
         if line == serial_device.BUTTON_PRESS:
             is_muted = mic_device.toggle()
             if(is_muted):
@@ -70,5 +69,5 @@ if __name__ == "__main__":
             else:
                 serial_device.turn_off();
 
-        time.sleep(1)
+        time.sleep(0.250)
 

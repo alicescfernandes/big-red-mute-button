@@ -19,7 +19,7 @@ The arduino accepts (over serial) two string values: a '0' and a '1',when is 0 t
 - Plug in your arduino
 - Upload the arduino code of this project
 
-## Mute the mic globally (only compatible with OSX) (WIP)
+## Mute the mic globally (only compatible with OSX & Windows) (WIP)
 With the help of some python code we can make the mic mute globally, aplication-wide. To do so, just follow the instructions below.
 
 I'm still working on a GUI to make this a little bit easier to do, and is still a little big hardcoded
