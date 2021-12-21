@@ -1,6 +1,8 @@
 import serial
 import serial.tools.list_ports
-
+import time
+import io
+import mic_control
 #with serial.Serial('/dev/ttyS1', 19200, timeout=1) as ser:
 #    ser.write(b'hello')     # write a string
 #    ser.close()             # close port
@@ -15,7 +17,8 @@ def get_ports():
 
 
 class UsbSerial:
-    def __init__(self,ort, baudrate = 9600):
+    def __init__(self,port, baudrate = 9600):
+        self.BUTTON_PRESS = "0";
         self.port = port;
         self.baudRate = baudrate
         self.connection = self.connect(self.port, self.baudRate)
@@ -41,22 +44,27 @@ class UsbSerial:
             if(line == '0'):
                 print("turn of mic")
 
-    def connect(port, onRead, baudRate = 9600, ):
+    def connect(self,port, onRead, baudRate = 9600, ):
         ser = serial.Serial(port, baudRate)
         return ser;
 
 
-    def readLine(self,line):
+    def readLine(self):
         line = self.connection.readline() 
-        #onRead(line);
-        if(line == '0'):
-            print("turn of mic")
-
+        return line.decode("utf8").strip()
+      
 
 if __name__ == "__main__":
     ports = get_ports()
     for port in ports:
         print(port.device)
+    mic_device = mic_control.MicControl()
+    serial_device = UsbSerial('/dev/cu.usbmodem14401');
+    while True:
+        line = serial_device.readLine()
+        
+        if line == serial_device.BUTTON_PRESS:
+            mic_device.toggle()
 
-    #ports = serial.tools.list_ports.comports()
-    #print(ports)
+        time.sleep(1)
+

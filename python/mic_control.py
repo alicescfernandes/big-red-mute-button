@@ -6,6 +6,16 @@ class MicControl:
         ""
         self.system = platform.system()
 
+    def is_muted(self):
+        if(self.system == "Darwin"):
+            return mac.get_volume() == '0'
+
+    def toggle(self):
+        if(self.is_muted()):
+            self.unmute()
+        else:
+            self.mute()  
+
     def mute(self):
         ""
         if(self.system == "Darwin"):
