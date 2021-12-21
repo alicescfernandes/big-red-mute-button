@@ -44,7 +44,6 @@ If your system is High Sierra or below you may need to install the CH34X drivers
 Some parts i've used here are somewhat expensive, so do replace them with cheaper ones. Just keep in mind that the arduino should have serial ports and also HID capabilities.
 
 # TODO:
-- Fritzing & Schematics
 - Moving JS code into an extension
 - GUI for python
 # References
