@@ -1,7 +1,6 @@
-# Big Red Mute Button
-
+# 🔴 Big Red Mute Button
+![](https://www.google-analytics.com/collect?v=1&t=event&tid=UA-100869248-2&cid=555&ec=github&ea=pageview&el=big-red-mute-button&ev=1)
 ### Mute that mic with Javascript and custom hardware!
-
 [insert image here]
 
 With the release of Chrome 80, a new web API was shipped with the browser. This API allows the browser to communicate via serial with other devices, however is behind a flag. This project makes use of that API to communicate with an Arduino Micro that opens a serial port over USB. Both are set to the 6900 baud rate, so that they can communicate with each other. 
@@ -14,29 +13,31 @@ The arduino accepts (over serial) two string values: a '0' and a '1',when is 0 t
 - Go to ``chrome://flags`` in your browser and enable the ``#enable-experimental-web-platform-features`` flag
 - Restart the browser
 - Install Tampermonkey extension
-- Install the script of this project  
+- Install the script of this project  (https://github.com/alicescfernandes/big-red-mute-button/raw/master/tampermonkey/mutebutton.user.js)
 - Reload the browser again
 - Plug in your arduino
 - Upload the arduino code of this project
 
 Go to any meets, a "Connect" button should now appear. Just click there, pick a device, and you are ready to go
 
-# BOM
-- A Relay
-- Arduino
-- Big red mute button
-- a X Ohm resistor
-- A 12V battery pack
+### Attention Mac Users!
+If your system is High Sierra or below you may need to install the CH34X drivers on your mac. [This page](https://github.com/adrianmihalko/ch340g-ch34g-ch34x-mac-os-x-driver) explain how you can install the driver
+
+
+# Parts
+- ~~A Relay~~ A IRFZ4N Transistor (i had a relay on the first draft, but it makes a clicking noise when switching, so i've replaced it with a 2N2222 transistor)
+- Arduino (i'm using a chinese version of nano)
+- [Big Dome Pushbutton](https://www.sparkfun.com/products/9181)
+- two 10k Ohm resistor
+- A 12V battery pack or
+- A 9V Battery and a 9V-12v step-up boost converter ([i'm using this one](https://www.pololu.com/product/2117))
+
+Some parts i've used here are somewhat expensive, so do replace them with cheaper ones. Just keep in mind that the arduino should have serial ports and also HID capabilities.
 
 # TODO:
 - Fritzing & Schematics
 - Moving JS code into an extension
 - Resistor values
-
-# Sugested Upgrades
-- Replace the relay with a MOSFET or a H-Bridge. This is a massive upgrade because it saves space and removes the clicking sound of the relay
-
-
 # References
 - [Web Serial API](https://web.dev/serial/)
 - [Web Serial Codelab](https://codelabs.developers.google.com/codelabs/web-serial/#0)
