@@ -1,5 +1,5 @@
-#define PIN_LED 13
-#define PIN_BTN 2 // must have interrupts on pin
+#define PIN_LED 8
+#define PIN_BTN 10 // must have interrupts on pin
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(9600);
