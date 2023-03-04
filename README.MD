@@ -32,6 +32,8 @@ I'm still working on a GUI to make this a little bit easier to do, and is still 
 ### Attention Mac Users!
 If your system is High Sierra or below you may need to install the CH34X drivers on your mac. [This page](https://github.com/adrianmihalko/ch340g-ch34g-ch34x-mac-os-x-driver) explain how you can install the driver
 
+### For M1 chips
+https://arduino.stackexchange.com/a/86787
 
 # Parts
 - ~~A Relay~~ A IRFZ44N Transistor (i had a relay on the first draft, but it makes a clicking noise when switching, so i've replaced it with a IRFZ44N transistor)
