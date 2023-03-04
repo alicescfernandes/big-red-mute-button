@@ -1,7 +1,5 @@
 brew install python-tk
 
-
-
 https://stackoverflow.com/questions/50025927/how-mute-microphone-by-python - windows
 https://stackoverflow.com/questions/65595113/changing-microphone-volume-using-python-windows-10 - windows
 https://www.nirsoft.net/utils/nircmd.html 
