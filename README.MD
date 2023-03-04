@@ -1,6 +1,6 @@
-# 🔴 Big Red Mute Button
+# 🔴 Big Red ~~Mute~~ Button
 ![](https://www.google-analytics.com/collect?v=1&t=event&tid=UA-100869248-2&cid=555&ec=github&ea=pageview&el=big-red-mute-button&ev=1)
-## Mute that mic with Javascript and custom hardware!
+## Mute that mic with Javascript or lock that computer with custom hardware!
 [insert image here]
 
 With the release of Chrome 80, a new web API was shipped with the browser. This API allows the browser to communicate via serial with other devices, however is behind a flag. This project makes use of that API to communicate with an Arduino Micro that opens a serial port over USB. Both are set to the 6900 baud rate, so that they can communicate with each other. 
