@@ -25,6 +25,12 @@ keys = {
 
 import os
 import re
+from ctypes import CDLL
+import sys
+import Quartz
+loginPF = CDLL('/System/Library/PrivateFrameworks/login.framework/Versions/Current/login')
+
+
 def mute():
     print("mac mute")
     stream = os.popen('osascript -e "set volume input volume 0"')
@@ -51,3 +57,11 @@ def unmute():
     print("mac unmute")
     stream = os.popen('osascript -e "set volume input volume 100"')
     output = stream.read()
+
+def is_screen_locked():
+    d=Quartz.CGSessionCopyCurrentDictionary()
+    return 'CGSSessionScreenIsLocked' in d.keys()
+
+def lock():
+    return loginPF.SACLockScreenImmediate()
+

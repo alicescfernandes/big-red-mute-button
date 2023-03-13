@@ -10,7 +10,7 @@ from utils import current_milli_time, threaded
 
 class LockControl:
     def __init__(self):
-        ""
+        print(0)
         self.system = platform.system()
         self.time_start = current_milli_time()
         self.time_current = self.time_start
@@ -23,9 +23,9 @@ class LockControl:
   
     def is_screen_locked(self):
         if(self.system == "Darwin"):
-            mac.is_screen_locked()
+            return mac.is_screen_locked()
         elif(self.system == "Windows"):
-            win.is_screen_locked()
+            return win.is_screen_locked()
         else:
             print("System not supported")
 
