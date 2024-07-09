@@ -28,6 +28,23 @@ class ServerCallbacks : public NimBLEServerCallbacks {
   }
 };
 
+int readValue(NimBLECharacteristic *c) {
+  time_t timestamp;
+  NimBLEAttValue stuff = btnCharacteristic->getValue();  // timestamp optional
+  const uint8_t *value = stuff.getValue(&timestamp);
+  return (int)value[0];
+}
+
+class BoxWriteCallbacks : public NimBLECharacteristicCallbacks {
+  void onWrite(NimBLECharacteristic *pCharacteristic) {
+    Serial.println("someone wrote here");
+    int value = readValue(pCharacteristic);
+
+    button_state = value ? true : false;
+    digitalWrite(RED_LED, button_state ? HIGH : LOW);
+  }
+};
+
 // https://www.bluetooth.com/specifications/dis-1-2/
 void create_dis_service() {
   // Create device info service (DIS)
@@ -52,23 +69,17 @@ void create_bas_service() {
 
 void create_box_service() {
   NimBLEService *service = bleServer->createService(BUTTON_SERVICE_UUID);
+  // btnCharacteristic = service->createCharacteristic(BTN_CHAR, NIMBLE_PROPERTY::READ | NIMBLE_PROPERTY::WRITE | NIMBLE_PROPERTY::READ_ENC | NIMBLE_PROPERTY::WRITE_ENC | NIMBLE_PROPERTY::READ_AUTHEN | NIMBLE_PROPERTY::WRITE_AUTHEN | NIMBLE_PROPERTY::NOTIFY);
 
-  btnCharacteristic = service->createCharacteristic(BTN_CHAR, NIMBLE_PROPERTY::READ | NIMBLE_PROPERTY::READ_ENC | NIMBLE_PROPERTY::READ_AUTHEN | NIMBLE_PROPERTY::NOTIFY);
-  btnCharacteristic->setValue(0);  // Clients can subscribe to this, and update as they wish
-
+  btnCharacteristic = service->createCharacteristic(BTN_CHAR, NIMBLE_PROPERTY::READ | NIMBLE_PROPERTY::WRITE | NIMBLE_PROPERTY::NOTIFY);
+  btnCharacteristic->setValue(byte(0));  // Clients can subscribe to this, and update as they wish
+  btnCharacteristic->setCallbacks(new BoxWriteCallbacks());
   service->start();
 }
 
 void write_value(NimBLECharacteristic *c, byte value) {
   c->setValue(value);
   c->notify(true);
-}
-
-void readValue(NimBLECharacteristic *c) {
-  time_t timestamp;
-  NimBLEAttValue stuff = btnCharacteristic->getValue();  // timestamp optional
-  const uint8_t *value = stuff.getValue(&timestamp);
-  Serial.println(value[0]);
 }
 
 void setup() {
