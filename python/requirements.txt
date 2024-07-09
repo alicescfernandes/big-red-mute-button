@@ -1,3 +1,0 @@
-pyserial
-tk
-pywin32
