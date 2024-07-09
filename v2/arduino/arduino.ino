@@ -2,11 +2,9 @@
 
 #include "secrets.h"
 
-#define RED_LED 2
+#define RED_LED D2
 #define RED_BTN D10
-#define STATUS_LED 2
 
-// void setup() in Arduino
 NimBLEServer *bleServer;
 NimBLECharacteristic *btnCharacteristic;
 
@@ -78,7 +76,7 @@ void setup() {
   NimBLEDevice::init("NimBLE");
 
   NimBLEDevice::setSecurityAuth(true, true, true);
-  NimBLEDevice::setSecurityPasskey(PASSKEY);  // TODO
+  NimBLEDevice::setSecurityPasskey(PASSKEY);
   NimBLEDevice::setSecurityIOCap(BLE_HS_IO_DISPLAY_ONLY);
 
   bleServer = NimBLEDevice::createServer();
@@ -93,6 +91,7 @@ void setup() {
   advertising->start();
 
   pinMode(RED_BTN, INPUT_PULLUP);
+  pinMode(RED_LED, OUTPUT);
   attachInterrupt(digitalPinToInterrupt(RED_BTN), on_button_click, FALLING);
 }
 
@@ -107,6 +106,9 @@ void on_button_click() {
 void loop() {
   if (write_to_characteristic) {
     write_to_characteristic = false;
+    Serial.println(button_state);
+    Serial.println(button_state ? HIGH : LOW);
+    digitalWrite(RED_LED, button_state ? HIGH : LOW);
     write_value(btnCharacteristic, button_state ? 1 : 0);
   }
 }
