@@ -36,14 +36,12 @@ If your system is High Sierra or below you may need to install the CH34X drivers
 https://arduino.stackexchange.com/a/86787
 
 # Parts
-- ~~A Relay~~ A IRFZ44N Transistor (i had a relay on the first draft, but it makes a clicking noise when switching, so i've replaced it with a IRFZ44N transistor)
-- Arduino (i'm using a chinese version of nano)
+- 2N222A Transistor 
+- Xiao ESP32C3
 - [Big Dome Pushbutton](https://www.sparkfun.com/products/9181)
-- two 10k Ohm resistor
-- A 12V battery pack or
-- A 9V Battery and a 9V-12v step-up boost converter ([i'm using this one](https://www.pololu.com/product/2117))
+- Buck Converter
+- Lithium Battery
 
-Some parts i've used here are somewhat expensive, so do replace them with cheaper ones. Just keep in mind that the arduino should have serial ports and also HID capabilities.
 
 # TODO:
 - Moving JS code into an extension
