@@ -84,6 +84,8 @@ void write_value(NimBLECharacteristic *c, byte value) {
   c->notify(true);
 }
 
+int round5(int n) { return (n / 5 + (n % 5 > 2)) * 5; }
+
 int get_battery_percentage() {
   uint32_t Vbatt = 0;
   for (int i = 0; i < 16; i++) {
@@ -129,11 +131,10 @@ void setup() {
 
   int battery = get_battery_percentage();
   previous_battery = battery;
-  write_value(batteryService, previous_battery);
+  write_value(bas_characteristic, previous_battery);
 }
 
 void loop() {
-  Serial.println(PASSKEY);
   if (write_to_characteristic) {
     write_to_characteristic = false;
     Serial.println(button_state);
