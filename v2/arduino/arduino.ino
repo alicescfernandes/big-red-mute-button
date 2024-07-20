@@ -2,14 +2,18 @@
 
 #include "secrets.h"
 
-#define RED_LED D2
+#define RED_LED D4
 #define RED_BTN D10
+#define STATUS_LED A0
+#define BATTERY_PERCENTAGE A1
+
+
 
 NimBLEServer *ble_server;
 NimBLECharacteristic *btn_characteristic;
 NimBLECharacteristic *bas_characteristic;
 
-bool deviceConnected = false;
+bool device_connected = false;
 bool prev_reading;
 bool reading;
 unsigned long last_debounce = 0;     // the last time the output pin was toggled
@@ -18,15 +22,27 @@ bool button_state = false;
 bool write_to_characteristic = false;
 int previous_battery = 0;
 
+const int ledPin = 13;
+
+int led_state = LOW;
+unsigned long previous_millis = 0;
+const long interval = 1000;
+
+
+
 class ServerCallbacks : public NimBLEServerCallbacks {
   void onConnect(NimBLEServer *pServer) {
-    deviceConnected = true;
+    device_connected = true;
+    digitalWrite(STATUS_LED, HIGH);
+
     Serial.println("connected");
   };
 
   void onDisconnect(NimBLEServer *pServer) {
-    deviceConnected = false;
+    device_connected = false;
     Serial.println("disconnected");
+    digitalWrite(STATUS_LED, LOW);
+
   }
 };
 
@@ -89,7 +105,7 @@ int round5(int n) { return (n / 5 + (n % 5 > 2)) * 5; }
 int get_battery_percentage() {
   uint32_t Vbatt = 0;
   for (int i = 0; i < 16; i++) {
-    Vbatt = Vbatt + analogReadMilliVolts(A0);  // ADC with correction
+    Vbatt = Vbatt + analogReadMilliVolts(BATTERY_PERCENTAGE);  // ADC with correction
   }
   float Vbattf = 2 * Vbatt / 16 / 1000.0;  // attenuation ratio 1/2, mV --> V
   int vbat = Vbattf * 100;
@@ -101,6 +117,7 @@ void on_button_click() {
   unsigned long current_time = millis();
   if (current_time - last_debounce > debounce_delay) {
     button_state = !button_state;
+    Serial.println("button press");
     write_to_characteristic = true;  // writing a characterstic inside of interrupt breaks XIAO
     last_debounce = current_time;
   }
@@ -125,8 +142,12 @@ void setup() {
   advertising->addServiceUUID(BUTTON_SERVICE_UUID);
   advertising->start();
 
-  pinMode(RED_BTN, INPUT_PULLUP);
   pinMode(RED_LED, OUTPUT);
+  pinMode(STATUS_LED,OUTPUT);
+
+  pinMode(BATTERY_PERCENTAGE, INPUT);
+  pinMode(RED_BTN, INPUT_PULLUP);
+  
   attachInterrupt(digitalPinToInterrupt(RED_BTN), on_button_click, FALLING);
 
   int battery = get_battery_percentage();
@@ -135,6 +156,7 @@ void setup() {
 }
 
 void loop() {
+  unsigned long current_millis = millis();
   if (write_to_characteristic) {
     write_to_characteristic = false;
     Serial.println(button_state);
@@ -147,5 +169,17 @@ void loop() {
   if (battery != previous_battery) {
     previous_battery = battery;
     write_value(bas_characteristic, previous_battery);
+  }
+
+  if (!device_connected && current_millis - previous_millis >= interval) {
+    previous_millis = current_millis;
+
+    if (led_state == LOW) {
+      led_state = HIGH;
+    } else {
+      led_state = LOW;
+    }
+
+    digitalWrite(STATUS_LED, led_state);
   }
 }
