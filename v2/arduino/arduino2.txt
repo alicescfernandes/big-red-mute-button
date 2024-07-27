@@ -150,10 +150,13 @@ void setup() {
 }
 
 void loop() {
+  Serial.println(digitalRead(RED_BTN));
+  Serial.println(digitalPinToInterrupt(RED_BTN));
+
   unsigned long current_millis = millis();
   if (write_to_characteristic) {
-    Serial.println("wrote to char");
     write_to_characteristic = false;
+    Serial.println(button_state);
     Serial.println(button_state ? HIGH : LOW);
     digitalWrite(RED_LED, button_state ? HIGH : LOW);
     write_value(btn_characteristic, button_state ? 1 : 0);
