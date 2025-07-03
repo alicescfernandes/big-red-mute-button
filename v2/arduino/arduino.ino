@@ -26,11 +26,45 @@ int led_state = LOW;
 unsigned long previous_millis = 0;
 const long interval = 1000;
 
+const uint8_t hidReportDescriptor[] = {
+    0x05, 0x01,  // Usage Page (Generic Desktop)
+    0x09, 0x02,  // Usage (Mouse)
+    0xA1, 0x01,  // Collection (Application)
+    0x09, 0x01,  //   Usage (Pointer)
+    0xA1, 0x00,  //   Collection (Physical)
+    0x05, 0x09,  //     Usage Page (Buttons)
+    0x19, 0x01,  //     Usage Minimum (1)
+    0x29, 0x03,  //     Usage Maximum (3)
+    0x15, 0x00,  //     Logical Minimum (0)
+    0x25, 0x01,  //     Logical Maximum (1)
+    0x95, 0x03,  //     Report Count (3)
+    0x75, 0x01,  //     Report Size (1)
+    0x81, 0x02,  //     Input (Data, Variable, Absolute)
+    0x95, 0x01,  //     Report Count (1)
+    0x75, 0x05,  //     Report Size (5)
+    0x81, 0x01,  //     Input (Constant)
+    0x05, 0x01,  //     Usage Page (Generic Desktop)
+    0x09, 0x30,  //     Usage (X)
+    0x09, 0x31,  //     Usage (Y)
+    0x15, 0x81,  //     Logical Minimum (-127)
+    0x25, 0x7F,  //     Logical Maximum (127)
+    0x75, 0x08,  //     Report Size (8)
+    0x95, 0x02,  //     Report Count (2)
+    0x81, 0x06,  //     Input (Data, Variable, Relative)
+    0xC0,        //   End Collection
+    0xC0         // End Collection
+};
+
 class ServerCallbacks : public NimBLEServerCallbacks {
-  void onConnect(NimBLEServer *pServer) {
+  void onConnect(NimBLEServer *pServer, ble_gap_conn_desc *desc) {
     device_connected = true;
     digitalWrite(STATUS_LED, HIGH);
+    Serial.println("connected");
 
+    NimBLEAddress addr(desc->peer_ota_addr);
+    Serial.println("Connected!");
+    Serial.print("Client address: ");
+    Serial.println(addr.toString().c_str());
     Serial.println("connected");
   };
 
@@ -58,6 +92,32 @@ class BoxWriteCallbacks : public NimBLECharacteristicCallbacks {
   }
 };
 
+void create_hid_service() {
+  NimBLEService *hidService = ble_server->createService("1812");  // HID service
+
+  // HID Info
+  const uint8_t hidInfo[] = {0x01, 0x01, 0x00, 0x02};
+  hidService->createCharacteristic("2A4A", NIMBLE_PROPERTY::READ_ENC | NIMBLE_PROPERTY::READ_AUTHEN)->setValue(hidInfo, sizeof(hidInfo));
+
+  // HID Report Map
+  hidService->createCharacteristic("2A4B", NIMBLE_PROPERTY::READ_ENC | NIMBLE_PROPERTY::READ_AUTHEN)->setValue(hidReportDescriptor, sizeof(hidReportDescriptor));
+
+  // HID Control Point
+  const uint8_t ctrl[] = {0x00};
+  hidService->createCharacteristic("2A4C", NIMBLE_PROPERTY::WRITE_NR)->setValue(ctrl, sizeof(ctrl));
+
+  // Protocol Mode
+  const uint8_t proto[] = {0x01};
+  hidService->createCharacteristic("2A4E", NIMBLE_PROPERTY::READ | NIMBLE_PROPERTY::WRITE_NR)->setValue(proto, sizeof(proto));
+
+  // Input Report characteristic (required by macOS)
+  NimBLECharacteristic *inputReport = hidService->createCharacteristic("2A4D", NIMBLE_PROPERTY::READ_ENC | NIMBLE_PROPERTY::NOTIFY | NIMBLE_PROPERTY::READ_AUTHEN);
+  const uint8_t dummyInput[] = {0x00, 0x00, 0x00};  // dummy mouse report
+  inputReport->setValue(dummyInput, sizeof(dummyInput));
+  inputReport->createDescriptor("2908", NIMBLE_PROPERTY::READ)->setValue(std::vector<uint8_t>{0x01, 0x01});  // Report ID 1, input
+
+  hidService->start();
+}
 // https://www.bluetooth.com/specifications/dis-1-2/
 void create_dis_service() {
   // Create device info service (DIS)
@@ -118,8 +178,9 @@ void on_button_click() {
 }
 
 void setup() {
-  Serial.begin(9600);
-  NimBLEDevice::init("Alice");
+  Serial.begin(11520);
+  NimBLEDevice::init(NAME);
+  // NimBLEDevice::deleteAllBonds();  // Dev Only
 
   NimBLEDevice::setSecurityAuth(true, true, true);
   NimBLEDevice::setSecurityPasskey(PASSKEY);
@@ -128,15 +189,18 @@ void setup() {
   ble_server = NimBLEDevice::createServer();
   ble_server->setCallbacks(new ServerCallbacks());
 
+  create_hid_service();
   create_dis_service();
   create_bas_service();
   create_box_service();
 
   NimBLEAdvertising *advertising = NimBLEDevice::getAdvertising();
+  advertising->addServiceUUID("1812");
   advertising->addServiceUUID(BUTTON_SERVICE_UUID);
-  advertising->setScanResponse(true);          
-  advertising->setMinPreferred(0x06);          
-  advertising->setMaxPreferred(0x12);  
+  advertising->setName(NAME);
+  advertising->setScanResponse(true);
+  advertising->setMinPreferred(0x06);
+  advertising->setMaxPreferred(0x12);
   advertising->start();
 
   pinMode(RED_LED, OUTPUT);
