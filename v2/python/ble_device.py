@@ -73,7 +73,7 @@ class BleDevice():
             await self.client.connect()
             logger.info("Connected to the device")
             await self.client.start_notify(BUTTON_CHARACTERISTIC, onRead)
-            logger.info(f"Started notifications on {CHARACTERISTIC}")
+            logger.info(f"Started notifications on {BUTTON_CHARACTERISTIC}")
         except Exception as e:
             logger.error(f"Failed to connect: {e}")
             await self.close()
@@ -132,7 +132,7 @@ if __name__ == "__main__":
         address = await device.get_address_for_name("Alice")
         print("address",address)
         await device.connect(address)
-        print("conected")
+        print("connected")
         # await device.subscribe(BATTERY_CHARACTERISTIC, callback_fn)
 
         #device_control.check_status(device.turn_on, device.turn_off, interval_ms=250)
