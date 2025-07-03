@@ -9,7 +9,10 @@ import os
 
 load_dotenv()  # This line brings all environment variables from .env into os.environ
 
-CHARACTERISTIC = os.environ['UUID']
+BATTERY_CHARACTERISTIC = os.environ['BATTERY_CHARACTERISTIC']
+BUTTON_CHARACTERISTIC = os.environ['BUTTON_CHARACTERISTIC']
+PASS_CODE = os.environ['PASS_CODE']
+DEVICE_NAME = os.environ['DEVICE_NAME']
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
@@ -26,7 +29,7 @@ class BleDevice():
         logger.info("Turning on the device...")
         
         async def main():
-            await self.client.write_gatt_char(CHARACTERISTIC,b'\x01')
+            await self.client.write_gatt_char(BUTTON_CHARACTERISTIC,b'\x01')
 
         asyncio.run(main())
         
@@ -39,7 +42,7 @@ class BleDevice():
 
         async def main():
 
-            await self.client.write_gatt_char(CHARACTERISTIC, b'\x00')
+            await self.client.write_gatt_char(BUTTON_CHARACTERISTIC, b'\x00')
 
         asyncio.run(main())
 
@@ -69,7 +72,7 @@ class BleDevice():
         try:
             await self.client.connect()
             logger.info("Connected to the device")
-            await self.client.start_notify(CHARACTERISTIC, onRead)
+            await self.client.start_notify(BUTTON_CHARACTERISTIC, onRead)
             logger.info(f"Started notifications on {CHARACTERISTIC}")
         except Exception as e:
             logger.error(f"Failed to connect: {e}")
@@ -96,7 +99,7 @@ class BleDevice():
         
 
     async def subscribe(self, address, onRead):
-        await self.client.start_notify(CHARACTERISTIC, onRead)
+        await self.client.start_notify(address, onRead)
 
     async def get_address_for_name(self, name):
         devices = await self.list_devices()
@@ -118,21 +121,23 @@ def callback_fn(char, byte_array):
     status = int.from_bytes(byte_array)
 
     if(status == 1):   
-        device_control.lock()
+        print("status")
+        # device_control.lock()
         
 if __name__ == "__main__":
     args = sys.argv[1:]
 
     async def main(args):
         device = BleDevice()
-        address = await device.get_address_for_name("NimBLE")
-        
+        address = await device.get_address_for_name("Alice")
+        print("address",address)
         await device.connect(address)
-        await device.subscribe(CHARACTERISTIC, callback_fn)
+        print("conected")
+        # await device.subscribe(BATTERY_CHARACTERISTIC, callback_fn)
 
-        device_control.check_status(device.turn_on, device.turn_off, interval_ms=250)
+        #device_control.check_status(device.turn_on, device.turn_off, interval_ms=250)
 
-        while await device.isOpen():
-            await asyncio.sleep(1)
+        #while await device.isOpen():
+        #    await asyncio.sleep(1)
 
     asyncio.run(main(args))

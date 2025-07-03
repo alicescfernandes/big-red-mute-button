@@ -1,3 +1,7 @@
+#  pip3 install -r requirements.txt
 pyserial
 tk
-pywin32
+# pywin32
+bleak
+dotenv
+pyobjc-framework-Quartz
