@@ -134,6 +134,9 @@ void setup() {
 
   NimBLEAdvertising *advertising = NimBLEDevice::getAdvertising();
   advertising->addServiceUUID(BUTTON_SERVICE_UUID);
+  advertising->setScanResponse(true);          
+  advertising->setMinPreferred(0x06);          
+  advertising->setMaxPreferred(0x12);  
   advertising->start();
 
   pinMode(RED_LED, OUTPUT);
