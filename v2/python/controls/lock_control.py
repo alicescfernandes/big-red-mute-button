@@ -12,7 +12,6 @@ elif(system == "Windows"):
 
 class LockControl:
     def __init__(self):
-        print(0) 
         self.system = platform.system()
         self.time_start = current_milli_time()
         self.time_current = self.time_start
@@ -21,7 +20,7 @@ class LockControl:
     def toggle(self):
         if(self.is_screen_locked() is  False):
             self.lock()
-        return True;
+        return True
   
     def is_screen_locked(self):
         if(self.system == "Darwin"):
