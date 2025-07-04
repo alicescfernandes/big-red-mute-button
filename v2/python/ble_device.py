@@ -30,7 +30,7 @@ class BleDevice():
 
         async def main():
             try:
-                await self.client.write_gatt_char(BUTTON_CHARACTERISTIC, 1)
+                await self.client.write_gatt_char(BUTTON_CHARACTERISTIC, b'\x01')
             except Exception as e:
                 logger.error(f"Failed to write to GATT characteristic: {e}")
 
@@ -45,7 +45,7 @@ class BleDevice():
 
         async def main():
             try:
-                await self.client.write_gatt_char(BUTTON_CHARACTERISTIC, 0)
+                await self.client.write_gatt_char(BUTTON_CHARACTERISTIC, b'\x00')
             except Exception as e:
                 logger.error(f"Failed to write to GATT characteristic: {e}")
 
@@ -142,8 +142,8 @@ if __name__ == "__main__":
         await device.connect(address)
         await device.subscribe(BUTTON_CHARACTERISTIC, button_callback_fn)
         device_control.check_status(device.turn_on, device.turn_off, interval_ms=250)
-        device.turn_off()
         while device.isOpen():
+            device.turn_on()
             await asyncio.sleep(1)
 
     asyncio.run(main(args))
