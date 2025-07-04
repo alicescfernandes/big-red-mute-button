@@ -19,7 +19,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 class BleDevice():
-    def __init__(self, loop):
+    def __init__(self, loop=None):
         self.client = None
         self.loop = loop
     def turn_on(self):
@@ -35,7 +35,7 @@ class BleDevice():
             except Exception as e:
                 logger.error(f"Failed to write to GATT characteristic: {e}")
 
-        asyncio.run_coroutine_threadsafe(main(), self.loop)
+        # asyncio.run_coroutine_threadsafe(main(), self.loop)
         
 
     def turn_off(self):
@@ -51,7 +51,7 @@ class BleDevice():
             except Exception as e:
                 logger.error(f"Failed to write to GATT characteristic: {e}")
 
-        asyncio.run_coroutine_threadsafe(main(), self.loop)
+        # asyncio.run_coroutine_threadsafe(main(), self.loop)
 
     async def close(self):
         """
@@ -118,7 +118,10 @@ class BleDevice():
         """
         List all BLE devices
         """
-        devices = await BleakScanner.discover()
+        devices = await BleakScanner.discover(timeout=5)
+        # for d in devices:
+        #    print(f"{d.name} ({d.address})")
+
         return devices
 
 if __name__ == "__main__":
@@ -142,9 +145,9 @@ if __name__ == "__main__":
         loop = asyncio.get_running_loop()  # <- pega o loop atual
         device = BleDevice(loop)
         address = await device.get_address_for_name("BigRedButton")
-        
-        await device.connect(address)
-        await device.subscribe(BUTTON_CHARACTERISTIC, button_callback_fn)
+        await device.list_devices()
+        # await device.connect(address)
+        # await device.subscribe(BUTTON_CHARACTERISTIC, button_callback_fn)
         
         device_control.check_status(device.turn_on, device.turn_off, interval_ms=250)
         
