@@ -19,9 +19,9 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 class BleDevice():
-    def __init__(self):
+    def __init__(self, loop):
         self.client = None
-
+        self.loop = loop
     def turn_on(self):
         """
         Called as a sync callback, but dispatches an async task.
@@ -30,11 +30,12 @@ class BleDevice():
 
         async def main():
             try:
+                logger.error("write to GATT characteristic")
                 await self.client.write_gatt_char(BUTTON_CHARACTERISTIC, b'\x01')
             except Exception as e:
                 logger.error(f"Failed to write to GATT characteristic: {e}")
 
-                asyncio.run_coroutine_threadsafe(main(), self.loop)
+        asyncio.run_coroutine_threadsafe(main(), self.loop)
         
 
     def turn_off(self):
@@ -45,11 +46,12 @@ class BleDevice():
 
         async def main():
             try:
+                logger.error("write to GATT characteristic")
                 await self.client.write_gatt_char(BUTTON_CHARACTERISTIC, b'\x00')
             except Exception as e:
                 logger.error(f"Failed to write to GATT characteristic: {e}")
 
-                asyncio.run_coroutine_threadsafe(main(), self.loop)
+        asyncio.run_coroutine_threadsafe(main(), self.loop)
 
     async def close(self):
         """
@@ -137,13 +139,16 @@ if __name__ == "__main__":
     args = sys.argv[1:]
 
     async def main(args):
-        device = BleDevice()
+        loop = asyncio.get_running_loop()  # <- pega o loop atual
+        device = BleDevice(loop)
         address = await device.get_address_for_name("BigRedButton")
+        
         await device.connect(address)
         await device.subscribe(BUTTON_CHARACTERISTIC, button_callback_fn)
+        
         device_control.check_status(device.turn_on, device.turn_off, interval_ms=250)
+        
         while device.isOpen():
-            device.turn_on()
             await asyncio.sleep(1)
 
     asyncio.run(main(args))
