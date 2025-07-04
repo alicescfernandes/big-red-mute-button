@@ -24,27 +24,32 @@ class BleDevice():
 
     def turn_on(self):
         """
-        Turn on the device (placeholder for actual implementation)
+        Called as a sync callback, but dispatches an async task.
         """
         logger.info("Turning on the device...")
-        
-        async def main():
-            await self.client.write_gatt_char(BUTTON_CHARACTERISTIC,b'\x01')
 
-        asyncio.run(main())
+        async def main():
+            try:
+                await self.client.write_gatt_char(BUTTON_CHARACTERISTIC, 1)
+            except Exception as e:
+                logger.error(f"Failed to write to GATT characteristic: {e}")
+
+                asyncio.run_coroutine_threadsafe(main(), self.loop)
         
 
     def turn_off(self):
         """
-        Turn off the device (placeholder for actual implementation)
+        Called as a sync callback, but dispatches an async task.
         """
         logger.info("Turning off the device...")
 
         async def main():
+            try:
+                await self.client.write_gatt_char(BUTTON_CHARACTERISTIC, 0)
+            except Exception as e:
+                logger.error(f"Failed to write to GATT characteristic: {e}")
 
-            await self.client.write_gatt_char(BUTTON_CHARACTERISTIC, b'\x00')
-
-        asyncio.run(main())
+                asyncio.run_coroutine_threadsafe(main(), self.loop)
 
     async def close(self):
         """
@@ -56,12 +61,12 @@ class BleDevice():
         else:
             logger.info("No active connection to close")
 
-    async def isOpen(self):
+    def isOpen(self):
         """
         Check if the connection to the device is open
         """
         if self.client:
-            return await self.client.is_connected()
+            return self.client.is_connected
         return False
 
     async def connect_with_context(self,address, onRead):
@@ -114,30 +119,31 @@ class BleDevice():
         devices = await BleakScanner.discover()
         return devices
 
-device_control = LockControl()
-
-def callback_fn(char, byte_array):
-    logger.debug(f"Notification from {char}: {byte_array}")
-    status = int.from_bytes(byte_array)
-
-    if(status == 1):   
-        print("status")
-        # device_control.lock()
-        
 if __name__ == "__main__":
+    device_control = LockControl()
+    
+    def battery_callback_fn(char, byte_array):
+        logger.debug(f"Notification from {char}: {byte_array}")
+        status = int.from_bytes(byte_array)
+        print("Battery", status)
+            
+    def button_callback_fn(char, byte_array):
+        logger.debug(f"Notification from {char}: {byte_array}")
+        status = int.from_bytes(byte_array)
+        print("Button", status)
+        if(status == 1):
+            device_control.lock()
+            
     args = sys.argv[1:]
 
     async def main(args):
         device = BleDevice()
-        address = await device.get_address_for_name("Alice")
-        print("address",address)
+        address = await device.get_address_for_name("BigRedButton")
         await device.connect(address)
-        print("connected")
-        # await device.subscribe(BATTERY_CHARACTERISTIC, callback_fn)
-
-        #device_control.check_status(device.turn_on, device.turn_off, interval_ms=250)
-
-        #while await device.isOpen():
-        #    await asyncio.sleep(1)
+        await device.subscribe(BUTTON_CHARACTERISTIC, button_callback_fn)
+        device_control.check_status(device.turn_on, device.turn_off, interval_ms=250)
+        device.turn_off()
+        while device.isOpen():
+            await asyncio.sleep(1)
 
     asyncio.run(main(args))

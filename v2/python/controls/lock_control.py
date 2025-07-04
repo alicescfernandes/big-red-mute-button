@@ -51,9 +51,11 @@ class LockControl:
                 is_screen_locked = self.is_screen_locked();
                 
                 if(is_screen_locked is True and previousLockStatus is False):
+                    print("lock")
                     callbackLock()
 
                 if(is_screen_locked is False and previousLockStatus is True):
+                    print("unlock")
                     callbackUnlock()
                 
                 if(previousLockStatus != is_screen_locked):
