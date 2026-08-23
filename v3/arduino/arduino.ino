@@ -199,7 +199,6 @@ bool blinkTwice() {
   unsigned long now = millis();
   if (now - blinkLastChange >= blinkInterval) {
     blinkLastChange = now;
-
     blinkLedOn = !blinkLedOn;
 
     if (blinkLedOn) {
@@ -277,6 +276,8 @@ void loop() {
   /* #region Button Led*/
   if (!device_connected) {
     breatheStep();
+    blinkCyclesDone = 0;
+    blinkLedOn = false;
   }
 
   // Clear the Neopixel if the device is connected
