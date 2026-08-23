@@ -1,13 +1,8 @@
 #include <NimBLEDevice.h>
+#include <Adafruit_NeoPixel.h>
 
 #include "secrets.h"
-
-#define RED_LED D4
-#define RED_BTN D9
-#define STATUS_LED A0
-
-NimBLEServer *ble_server;
-NimBLECharacteristic *btn_characteristic;
+#include "constants.h"
 
 bool device_connected = false;
 bool prev_reading;
@@ -16,59 +11,34 @@ unsigned long last_debounce = 0;     // the last time the output pin was toggled
 unsigned long debounce_delay = 150;  // the debounce time; increase if the output flickers
 bool button_state = false;
 bool write_to_characteristic = false;
-int previous_battery = 0;
 
-int led_state = LOW;
 
 unsigned long previous_millis = 0;
 const long interval = 1000;
 
-const uint8_t hidReportDescriptor[] = {
-    0x05, 0x01,  // Usage Page (Generic Desktop)
-    0x09, 0x02,  // Usage (Mouse)
-    0xA1, 0x01,  // Collection (Application)
-    0x09, 0x01,  //   Usage (Pointer)
-    0xA1, 0x00,  //   Collection (Physical)
-    0x05, 0x09,  //     Usage Page (Buttons)
-    0x19, 0x01,  //     Usage Minimum (1)
-    0x29, 0x03,  //     Usage Maximum (3)
-    0x15, 0x00,  //     Logical Minimum (0)
-    0x25, 0x01,  //     Logical Maximum (1)
-    0x95, 0x03,  //     Report Count (3)
-    0x75, 0x01,  //     Report Size (1)
-    0x81, 0x02,  //     Input (Data, Variable, Absolute)
-    0x95, 0x01,  //     Report Count (1)
-    0x75, 0x05,  //     Report Size (5)
-    0x81, 0x01,  //     Input (Constant)
-    0x05, 0x01,  //     Usage Page (Generic Desktop)
-    0x09, 0x30,  //     Usage (X)
-    0x09, 0x31,  //     Usage (Y)
-    0x15, 0x81,  //     Logical Minimum (-127)
-    0x25, 0x7F,  //     Logical Maximum (127)
-    0x75, 0x08,  //     Report Size (8)
-    0x95, 0x02,  //     Report Count (2)
-    0x81, 0x06,  //     Input (Data, Variable, Relative)
-    0xC0,        //   End Collection
-    0xC0         // End Collection
-};
+int blinkCyclesDone = 0;       // number of completed on-off blinks
+bool blinkLedOn = false;       // current state within a cycle
+unsigned long blinkLastChange = 0;
+const unsigned long blinkInterval = 150; // ms per half-cycle (on or off)
+
 
 class ServerCallbacks : public NimBLEServerCallbacks {
-  void onConnect(NimBLEServer *pServer, ble_gap_conn_desc *desc) {
+public:
+  void onConnect(NimBLEServer* pServer, NimBLEConnInfo& connInfo) {
     device_connected = true;
-    digitalWrite(STATUS_LED, HIGH);
-    Serial.println("connected");
 
-    NimBLEAddress addr(desc->peer_ota_addr);
-    Serial.println("Connected!");
+    Serial.println("connected");
     Serial.print("Client address: ");
-    Serial.println(addr.toString().c_str());
-    Serial.println("connected");
-  };
+    Serial.println(connInfo.getAddress().toString().c_str());
+  }
 
-  void onDisconnect(NimBLEServer *pServer) {
+  void onDisconnect(NimBLEServer* pServer, NimBLEConnInfo& connInfo, int reason) {
     device_connected = false;
+    
     Serial.println("disconnected");
-    digitalWrite(STATUS_LED, LOW);
+
+    // Restart advertising so the device can connect again
+    NimBLEDevice::startAdvertising();
   }
 };
 
@@ -80,12 +50,24 @@ int read_value(NimBLECharacteristic *c) {
 }
 
 class BoxWriteCallbacks : public NimBLECharacteristicCallbacks {
-  void onWrite(NimBLECharacteristic *pCharacteristic) {
+public:
+  void onWrite(
+    NimBLECharacteristic* pCharacteristic,
+    NimBLEConnInfo& connInfo
+  ) {
     Serial.println("someone wrote here");
-    int value = read_value(pCharacteristic);
 
-    button_state = value ? true : false;
-    digitalWrite(RED_LED, button_state ? HIGH : LOW);
+    NimBLEAttValue value = pCharacteristic->getValue();
+
+    if (value.size() > 0) {
+      button_state = value[0] != 0;
+
+      if(button_state){
+        showAll();
+      }else{
+        hideAll();
+      }
+    }
   }
 };
 
@@ -127,16 +109,6 @@ void create_dis_service() {
   service->start();
 }
 
-// https://www.bluetooth.com/specifications/specs/battery-service/
-void create_bas_service() {
-  NimBLEService *service = ble_server->createService("180F");
-
-  bas_characteristic = service->createCharacteristic("2A19", NIMBLE_PROPERTY::READ | NIMBLE_PROPERTY::NOTIFY);
-  bas_characteristic->setValue(100);  // Clients can subscribe to this, and update as they wish
-
-  service->start();
-}
-
 void create_box_service() {
   NimBLEService *service = ble_server->createService(BUTTON_SERVICE_UUID);
   btn_characteristic = service->createCharacteristic(BTN_CHARACTERISTIC, NIMBLE_PROPERTY::READ | NIMBLE_PROPERTY::WRITE | NIMBLE_PROPERTY::READ_ENC | NIMBLE_PROPERTY::WRITE_ENC | NIMBLE_PROPERTY::READ_AUTHEN | NIMBLE_PROPERTY::WRITE_AUTHEN | NIMBLE_PROPERTY::NOTIFY);
@@ -163,9 +135,93 @@ void on_button_click() {
   }
 }
 
+
+// Call this once in setup() after pixels.begin()
+void breatheInit() {
+  pixels.begin();
+  pixels.setBrightness(0);
+  pixels.show();
+}
+
+bool breatheStep() {
+  static int brightness = 0;
+  static int step = 1;
+  static unsigned long lastUpdate = 0;
+  const unsigned long interval = 10; // ms between steps (tune speed here)
+
+  unsigned long now = millis();
+  if (now - lastUpdate >= interval) {
+    lastUpdate = now;
+
+    brightness += step;
+
+    if (brightness >= 255) {
+      brightness = 255;
+      step = -1;
+    } else if (brightness <= 0) {
+      brightness = 0;
+      step = 1;
+    }
+
+    pixels.setBrightness(brightness);
+    for (int i = 0; i < NUMPIXELS; i++) {
+      pixels.setPixelColor(i, pixels.Color(255, 255, 255));
+    }
+    pixels.show();
+  }
+
+  return true;
+}
+
+
+// Call this every loop() until it returns false (animation done)
+// Call every loop().
+// To start: blinkCyclesDone = 0; blinkLedOn = false;
+// Returns true while blinking, false when idle/done.
+
+void showAll(){
+  pixels.setBrightness(255);
+  for (int i = 0; i < NUMPIXELS; i++) {
+      pixels.setPixelColor(i, pixels.Color(255, 255, 255));
+    }    
+  pixels.show();
+}
+
+void hideAll(){
+  pixels.setBrightness(0);
+  pixels.clear();
+  pixels.show();
+}
+
+bool blinkTwice() {
+  if (blinkCyclesDone >= 2) {
+      return false; // done
+    }
+    
+  unsigned long now = millis();
+  if (now - blinkLastChange >= blinkInterval) {
+    blinkLastChange = now;
+
+    blinkLedOn = !blinkLedOn;
+
+    if (blinkLedOn) {
+      showAll();
+    } else {
+      hideAll();
+      blinkCyclesDone++;
+    }
+  }
+
+  return true; // still blinking
+}
+
 void setup() {
   Serial.begin(11520);
   NimBLEDevice::init(NAME);
+
+  pinMode(RED_LED, OUTPUT);
+
+  pinMode(RED_BTN, INPUT_PULLUP);
   // NimBLEDevice::deleteAllBonds();  // Dev Only
 
   NimBLEDevice::setSecurityAuth(true, true, true);
@@ -177,27 +233,32 @@ void setup() {
 
   create_hid_service();
   create_dis_service();
-  // create_bas_service(); // Create battery service
   create_box_service();
 
   NimBLEAdvertising *advertising = NimBLEDevice::getAdvertising();
-  advertising->addServiceUUID("1812");
-  advertising->addServiceUUID(BUTTON_SERVICE_UUID);
-  advertising->setName(NAME);
-  advertising->setScanResponse(true);
-  advertising->setMinPreferred(0x06);
-  advertising->setMaxPreferred(0x12);
+  advertising->addServiceUUID("1812");                 // HID Service
+  advertising->addServiceUUID(BUTTON_SERVICE_UUID);    // your custom service
+  advertising->setName(NAME);                          // device name
+
+  // Optional: set scan response data instead of setScanResponse(true)
+  NimBLEAdvertisementData scanData;
+  scanData.setName(NAME);
+  advertising->setScanResponseData(scanData);
+
+  // Optional: set preferred connection intervals (if your core supports it)
+  // advertising->setMinInterval(0x06);  // 7.5 ms
+  // advertising->setMaxInterval(0x12);  // 22.5 ms
+
   advertising->start();
 
-  pinMode(RED_LED, OUTPUT);
-  pinMode(STATUS_LED, OUTPUT);
-
-  pinMode(RED_BTN, INPUT_PULLUP);
-
   attachInterrupt(digitalPinToInterrupt(RED_BTN), on_button_click, FALLING);
+
+  breatheInit();
 }
 
 void loop() {
+  
+  /* #region Bluetooth Button */
   unsigned long current_millis = millis();
   if (write_to_characteristic) {
     Serial.println("wrote to char");
@@ -206,16 +267,17 @@ void loop() {
     digitalWrite(RED_LED, button_state ? HIGH : LOW);
     write_value(btn_characteristic, button_state ? 1 : 0);
   }
+  /* #endregion */
 
-  if (!device_connected && current_millis - previous_millis >= interval) {
-    previous_millis = current_millis;
-
-    if (led_state == LOW) {
-      led_state = HIGH;
-    } else {
-      led_state = LOW;
-    }
-
-    digitalWrite(STATUS_LED, led_state);
+  /* #region Button Led*/
+  if (!device_connected) {
+    breatheStep();
   }
+
+  // Clear the Neopixel if the device is connected
+  if(device_connected){
+    Serial.println("blinkCyclesDone:" + String(blinkCyclesDone));
+   blinkTwice();
+  }
+  /* #endregion */
 }

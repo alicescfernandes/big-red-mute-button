@@ -3,10 +3,10 @@
 #define BUTTON D1
 #define PIN_MODE INPUT_PULLUP // D1 can use the internal pull up resistor
 
-#define PIN D9
+#define NEOPIXEL_PIN D9
 #define NUMPIXELS 12
 
-Adafruit_NeoPixel pixels(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel pixels(NUMPIXELS, NEOPIXEL_PIN, NEO_GRB + NEO_KHZ800);
 #define DELAYVAL 175
 
 // Sketch to setup the individual components before bringing in the bluetooth code
@@ -36,4 +36,6 @@ void loop() {
   }
   
   pixels.show();
+  // #endregion
+
 }
