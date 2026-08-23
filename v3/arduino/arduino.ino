@@ -8,7 +8,7 @@ bool device_connected = false;
 bool prev_reading;
 bool reading;
 unsigned long last_debounce = 0;     // the last time the output pin was toggled
-unsigned long debounce_delay = 150;  // the debounce time; increase if the output flickers
+unsigned long debounce_delay = 200;  // the debounce time; increase if the output flickers
 bool button_state = false;
 bool write_to_characteristic = false;
 
@@ -90,6 +90,7 @@ void create_hid_service() {
   hidService->createCharacteristic("2A4E", NIMBLE_PROPERTY::READ | NIMBLE_PROPERTY::WRITE_NR)->setValue(proto, sizeof(proto));
 
   // Input Report characteristic (required by macOS)
+  // NimBLECharacteristic *inputReport = hidService->createCharacteristic("2A4D", NIMBLE_PROPERTY::READ_ENC | NIMBLE_PROPERTY::NOTIFY | NIMBLE_PROPERTY::READ_AUTHEN);
   NimBLECharacteristic *inputReport = hidService->createCharacteristic("2A4D", NIMBLE_PROPERTY::READ_ENC | NIMBLE_PROPERTY::NOTIFY | NIMBLE_PROPERTY::READ_AUTHEN);
   const uint8_t dummyInput[] = {0x00, 0x00, 0x00};  // dummy mouse report
   inputReport->setValue(dummyInput, sizeof(dummyInput));
@@ -120,11 +121,12 @@ void create_box_service() {
 }
 
 void write_value(NimBLECharacteristic *c, byte value) {
+  Serial.print("write_value: ");
+  Serial.println(value, HEX);
+
   c->setValue(value);
   c->notify(true);
 }
-
-int round5(int n) { return (n / 5 + (n % 5 > 2)) * 5; }
 
 void on_button_click() {
   unsigned long current_time = millis();
@@ -180,7 +182,7 @@ bool breatheStep() {
 // Returns true while blinking, false when idle/done.
 
 void showAll(){
-  pixels.setBrightness(255);
+  pixels.setBrightness(90);
   for (int i = 0; i < NUMPIXELS; i++) {
       pixels.setPixelColor(i, pixels.Color(255, 255, 255));
     }    
@@ -251,7 +253,7 @@ void setup() {
 
   advertising->start();
 
-  attachInterrupt(digitalPinToInterrupt(RED_BTN), on_button_click, FALLING);
+  attachInterrupt(digitalPinToInterrupt(RED_BTN), on_button_click, RISING);
 
   breatheInit();
 }
@@ -260,12 +262,19 @@ void loop() {
   
   /* #region Bluetooth Button */
   unsigned long current_millis = millis();
-  if (write_to_characteristic) {
-    Serial.println("wrote to char");
+  if (write_to_characteristic && device_connected) {
     write_to_characteristic = false;
+    Serial.println("wrote to char");
     Serial.println(button_state ? HIGH : LOW);
-    digitalWrite(RED_LED, button_state ? HIGH : LOW);
-    write_value(btn_characteristic, button_state ? 1 : 0);
+    
+    if(button_state){
+      showAll();
+      write_value(btn_characteristic,1);
+    }else{
+      hideAll();
+      write_value(btn_characteristic, 0);
+    }
+
   }
   /* #endregion */
 
@@ -276,7 +285,6 @@ void loop() {
 
   // Clear the Neopixel if the device is connected
   if(device_connected){
-    Serial.println("blinkCyclesDone:" + String(blinkCyclesDone));
    blinkTwice();
   }
   /* #endregion */
