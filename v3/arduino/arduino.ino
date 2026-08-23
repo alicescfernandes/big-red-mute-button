@@ -5,11 +5,9 @@
 #define RED_LED D4
 #define RED_BTN D9
 #define STATUS_LED A0
-#define BATTERY_PERCENTAGE A1
 
 NimBLEServer *ble_server;
 NimBLECharacteristic *btn_characteristic;
-NimBLECharacteristic *bas_characteristic;
 
 bool device_connected = false;
 bool prev_reading;
@@ -157,17 +155,6 @@ void write_value(NimBLECharacteristic *c, byte value) {
 
 int round5(int n) { return (n / 5 + (n % 5 > 2)) * 5; }
 
-int get_battery_percentage() {
-  uint32_t Vbatt = 0;
-  for (int i = 0; i < 16; i++) {
-    Vbatt = Vbatt + analogReadMilliVolts(BATTERY_PERCENTAGE);  // ADC with correction
-  }
-  float Vbattf = 2 * Vbatt / 16 / 1000.0;  // attenuation ratio 1/2, mV --> V
-  int vbat = Vbattf * 100;
-  long val = map(vbat, 250, 390, 0, 100);
-  return round5(val);
-}
-
 void on_button_click() {
   unsigned long current_time = millis();
   if (current_time - last_debounce > debounce_delay) {
@@ -191,7 +178,7 @@ void setup() {
 
   create_hid_service();
   create_dis_service();
-  create_bas_service();
+  // create_bas_service(); // Create battery service
   create_box_service();
 
   NimBLEAdvertising *advertising = NimBLEDevice::getAdvertising();
@@ -206,14 +193,9 @@ void setup() {
   pinMode(RED_LED, OUTPUT);
   pinMode(STATUS_LED, OUTPUT);
 
-  pinMode(BATTERY_PERCENTAGE, INPUT);
   pinMode(RED_BTN, INPUT_PULLUP);
 
   attachInterrupt(digitalPinToInterrupt(RED_BTN), on_button_click, FALLING);
-
-  int battery = get_battery_percentage();
-  previous_battery = battery;
-  write_value(bas_characteristic, previous_battery);
 }
 
 void loop() {
@@ -224,12 +206,6 @@ void loop() {
     Serial.println(button_state ? HIGH : LOW);
     digitalWrite(RED_LED, button_state ? HIGH : LOW);
     write_value(btn_characteristic, button_state ? 1 : 0);
-  }
-
-  int battery = get_battery_percentage();
-  if (battery != previous_battery) {
-    previous_battery = battery;
-    write_value(bas_characteristic, previous_battery);
   }
 
   if (!device_connected && current_millis - previous_millis >= interval) {
