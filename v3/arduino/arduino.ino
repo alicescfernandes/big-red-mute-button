@@ -121,7 +121,7 @@ void create_box_service() {
 
 void write_value(int value) {
   btn_characteristic->setValue(byte(value));
-  btn_characteristic->notify(true);
+  btn_characteristic->notify();
 }
 
 void on_button_click() {
@@ -265,10 +265,10 @@ void loop() {
     
     if(button_state){
       showAll();
-      write_value(2);
+      write_value(1);
     }else{
       hideAll();
-      write_value(3);
+      write_value(0);
     }
 
   }
