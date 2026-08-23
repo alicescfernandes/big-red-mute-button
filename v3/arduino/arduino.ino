@@ -18,9 +18,8 @@ bool button_state = false;
 bool write_to_characteristic = false;
 int previous_battery = 0;
 
-const int ledPin = 13;
-
 int led_state = LOW;
+
 unsigned long previous_millis = 0;
 const long interval = 1000;
 
