@@ -90,7 +90,6 @@ void create_hid_service() {
   hidService->createCharacteristic("2A4E", NIMBLE_PROPERTY::READ | NIMBLE_PROPERTY::WRITE_NR)->setValue(proto, sizeof(proto));
 
   // Input Report characteristic (required by macOS)
-  // NimBLECharacteristic *inputReport = hidService->createCharacteristic("2A4D", NIMBLE_PROPERTY::READ_ENC | NIMBLE_PROPERTY::NOTIFY | NIMBLE_PROPERTY::READ_AUTHEN);
   NimBLECharacteristic *inputReport = hidService->createCharacteristic("2A4D", NIMBLE_PROPERTY::READ_ENC | NIMBLE_PROPERTY::NOTIFY | NIMBLE_PROPERTY::READ_AUTHEN);
   const uint8_t dummyInput[] = {0x00, 0x00, 0x00};  // dummy mouse report
   inputReport->setValue(dummyInput, sizeof(dummyInput));
@@ -120,12 +119,9 @@ void create_box_service() {
   service->start();
 }
 
-void write_value(NimBLECharacteristic *c, byte value) {
-  Serial.print("write_value: ");
-  Serial.println(value, HEX);
-
-  c->setValue(value);
-  c->notify(true);
+void write_value(int value) {
+  btn_characteristic->setValue(byte(value));
+  btn_characteristic->notify(true);
 }
 
 void on_button_click() {
@@ -269,10 +265,10 @@ void loop() {
     
     if(button_state){
       showAll();
-      write_value(btn_characteristic,1);
+      write_value(2);
     }else{
       hideAll();
-      write_value(btn_characteristic, 0);
+      write_value(3);
     }
 
   }
@@ -285,6 +281,7 @@ void loop() {
 
   // Clear the Neopixel if the device is connected
   if(device_connected){
+   Serial.println("blinkCyclesDone:" + String(blinkCyclesDone));
    blinkTwice();
   }
   /* #endregion */
