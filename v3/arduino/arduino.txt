@@ -1,0 +1,14 @@
+#define BUTTON D9
+
+void setup() {
+  // Setup the pushbutton as an input and enable internal pullup
+  pinMode(BUTTON, INPUT_PULLUP);
+
+  // Setup Serial Port
+  Serial.begin(9600);
+}
+
+void loop() {
+  // Print pushbutton state to serial monitor
+  Serial.println(digitalRead(BUTTON));
+}
