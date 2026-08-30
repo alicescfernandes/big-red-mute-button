@@ -132,7 +132,7 @@ public:
 
     if (value.size() > 0) {
       button_state = value[0] != 0;
-      breatheStep(button_state ? BREATHE_IN : BREATHE_OUT, 1);
+      animate_button_state = true;
     }
   }
 };
