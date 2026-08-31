@@ -317,7 +317,10 @@ void setup() {
 void loop() {
 
   /* #region Bluetooth Button */
-    if (device_connected_state) {
+  if (device_connected_state) {
+    Serial.println("blink_cycles_done:" + String(blink_cycles_done));
+    blinkTwice();
+
     if (write_to_characteristic_state) {
       write_to_characteristic_state = false;
       animate_button_state = true;
@@ -330,18 +333,15 @@ void loop() {
     if (animate_button_state) {
       animate_button_state = breatheStep(button_state ? BREATHE_IN : BREATHE_OUT, 1);
     }
+
+    if(standby_state){
+      updateStandbyAnimation();
+    }
   }
   /* #endregion */
 
-  /* #region Button Led*/
   if (!device_connected_state) {
     breatheStep(BREATHE_IN_OUT);
   }
 
-  // Clear the Neopixel if the device is connected
-  if (device_connected_state) {
-    Serial.println("blink_cycles_done:" + String(blink_cycles_done));
-    blinkTwice();
-  }
-  /* #endregion */
 }
