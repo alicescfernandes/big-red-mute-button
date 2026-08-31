@@ -4,32 +4,35 @@
 #include "secrets.h"
 #include "constants.h"
 
-unsigned long last_debounce = 0;     // the last time the output pin was toggled
+volatile unsigned long last_debounce = 0;
 static unsigned long debounce_delay = 260;  // the debounce time; increase if the output flickers
+
 
 bool animate_button_state = false;
 bool device_connected_state = false;
-bool button_state = false; // state triggered phisically via button
-bool standby_state = false; // sleep state only activated via software
-bool write_to_characteristic_state = false;
+// https://forum.arduino.cc/t/explanation-of-volatile/402932
+volatile bool button_state = false; // state triggered phisically via button. written inside a interrupt
+volatile bool standby_state = false; // sleep state only activated via software. written inside a interrupt
+volatile bool write_to_characteristic_state = false; // written inside a interrupt
+
 
 int blink_cycles_done = 0;  // number of completed on-off blinks
 bool blink_led_state = false;  // current state within a cycle
 unsigned long blink_last_changed = 0;
 
 
-
+/**
 int read_value(NimBLECharacteristic *c) {
   time_t timestamp;
   NimBLEAttValue stuff = btn_characteristic->getValue();  // timestamp optional
   const uint8_t *value = stuff.getValue(&timestamp);
   return (int)value[0];
 }
+*/
 
-
-void write_btn_characterstic_value(int value) {
-  btn_characteristic->setValue(byte(value));
-  btn_characteristic->notify();
+void write_value(NimBLECharacteristic *c, int value) {
+  c->setValue(byte(value));
+  c->notify();
 }
 
 // Call every on loop with 1 of the 3 animations.
@@ -99,7 +102,9 @@ void resetState(){
   standby_state = false;
 
   // resets the bluetooth state
-  write_btn_characterstic_value(0);
+  write_value(btn_characteristic,0);
+  write_value(standby_characteristic,0);
+
 }
 
 class ServerCallbacks : public NimBLEServerCallbacks {
@@ -116,6 +121,7 @@ public:
     device_connected_state = false;
 
     Serial.println("disconnected");
+    resetState();
 
     // Restart advertising so the device can connect again
     NimBLEDevice::startAdvertising();
@@ -266,7 +272,7 @@ bool blinkTwice() {
 }
 
 void setup() {
-  Serial.begin(11520);
+  Serial.begin(115200);
   NimBLEDevice::init(NAME);
 
   pinMode(RED_LED, OUTPUT);
@@ -311,18 +317,14 @@ void setup() {
 void loop() {
 
   /* #region Bluetooth Button */
-  unsigned long current_millis = millis();
-  if (device_connected_state) {
+    if (device_connected_state) {
     if (write_to_characteristic_state) {
       write_to_characteristic_state = false;
       animate_button_state = true;
       Serial.println("wrote to char");
       Serial.println(button_state ? HIGH : LOW);
-      if (button_state) {
-        write_btn_characterstic_value(1);
-      } else {
-        write_btn_characterstic_value(0);
-      }
+      int characteristic_value = button_state ? 1 : 0;
+      write_value(btn_characteristic, characteristic_value);
     }
 
     if (animate_button_state) {
@@ -334,7 +336,6 @@ void loop() {
   /* #region Button Led*/
   if (!device_connected_state) {
     breatheStep(BREATHE_IN_OUT);
-    resetState();
   }
 
   // Clear the Neopixel if the device is connected
