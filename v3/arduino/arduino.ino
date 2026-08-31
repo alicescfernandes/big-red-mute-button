@@ -9,7 +9,8 @@ static unsigned long debounce_delay = 260;  // the debounce time; increase if th
 
 bool animate_button_state = false;
 bool device_connected_state = false;
-bool button_state = false;
+bool button_state = false; // state triggered phisically via button
+bool standby_state = false; // sleep state only activated via software
 bool write_to_characteristic_state = false;
 
 int blink_cycles_done = 0;  // number of completed on-off blinks
@@ -95,6 +96,7 @@ void resetState(){
   blink_led_state = false;
   button_state = false;
   write_to_characteristic_state = false;
+  standby_state = false;
 
   // resets the bluetooth state
   write_btn_characterstic_value(0);
@@ -126,16 +128,26 @@ public:
   void onWrite(
     NimBLECharacteristic *pCharacteristic,
     NimBLEConnInfo &connInfo) {
-    Serial.println("someone wrote here");
-
     NimBLEAttValue value = pCharacteristic->getValue();
 
-    if (value.size() > 0) {
-      button_state = value[0] != 0;
-      animate_button_state = true;
+    if (pCharacteristic->getUUID().equals(NimBLEUUID(BTN_CHARACTERISTIC)) && standby_state == false) {
+      // handle button write
+        if (value.size() > 0) {
+          button_state = value[0] != 0;
+          animate_button_state = true;
+        }
+    } 
+    
+    if (pCharacteristic->getUUID().equals(NimBLEUUID(STANDBY_CHARACTERISTIC))) {
+      // handle standby write
+      if (value.size() > 0) {
+          standby_state = value[0] != 0;
+        }
     }
   }
 };
+
+
 
 void create_hid_service() {
   NimBLEService *hidService = ble_server->createService("1812");  // HID service
@@ -163,6 +175,7 @@ void create_hid_service() {
 
   hidService->start();
 }
+
 // https://www.bluetooth.com/specifications/dis-1-2/
 void create_dis_service() {
   // Create device info service (DIS)
@@ -182,13 +195,25 @@ void create_box_service() {
   // btn_characteristic = service->createCharacteristic(BTN_CHARACTERISTIC, NIMBLE_PROPERTY::READ | NIMBLE_PROPERTY::WRITE | NIMBLE_PROPERTY::NOTIFY);
   btn_characteristic->setValue(byte(0));  // Clients can subscribe to this, and update as they wish
   btn_characteristic->setCallbacks(new BoxWriteCallbacks());
+
+  // Add the 0x2901 User Description descriptor
+  NimBLEDescriptor *btn_description = btn_characteristic->createDescriptor("2901", NIMBLE_PROPERTY::READ_AUTHEN, 100);
+  btn_description->setValue("Button  status (pressed / not pressed)");
+
+  standby_characteristic = service->createCharacteristic(STANDBY_CHARACTERISTIC, NIMBLE_PROPERTY::READ | NIMBLE_PROPERTY::WRITE | NIMBLE_PROPERTY::READ_ENC | NIMBLE_PROPERTY::WRITE_ENC | NIMBLE_PROPERTY::READ_AUTHEN | NIMBLE_PROPERTY::WRITE_AUTHEN | NIMBLE_PROPERTY::NOTIFY);
+  standby_characteristic->setValue(byte(0));  // Clients can subscribe to this, and update as they wish
+
+  // Add the 0x2901 User Description descriptor
+  NimBLEDescriptor *standby_description = standby_characteristic->createDescriptor("2901", NIMBLE_PROPERTY::READ_AUTHEN, 100);
+  standby_description->setValue("Standby Mode");
+
   service->start();
 }
 
 
 void on_button_click() {
   unsigned long current_time = millis();
-  if (current_time - last_debounce > debounce_delay) {
+  if (current_time - last_debounce > debounce_delay && standby_state == false) {
     button_state = !button_state;
     write_to_characteristic_state = true;  // writing a characterstic inside of interrupt breaks XIAO
     last_debounce = current_time;

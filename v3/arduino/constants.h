@@ -38,6 +38,7 @@ Adafruit_NeoPixel pixels(NUMPIXELS, NEOPIXEL_PIN, NEO_GRB + NEO_KHZ800);
 
 NimBLEServer *ble_server;
 NimBLECharacteristic *btn_characteristic;
+NimBLECharacteristic *standby_characteristic;
 
 
 enum BreatheMode { BREATHE_IN,
