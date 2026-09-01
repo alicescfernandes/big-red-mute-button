@@ -1,8 +1,6 @@
-#define RED_LED D4
-#define RED_BTN D1
-#define STATUS_LED A0
+#define RED_BTN 1
 
-#define NEOPIXEL_PIN D9
+#define NEOPIXEL_PIN 4
 #define NUMPIXELS 12
 
 const uint8_t hidReportDescriptor[] = {

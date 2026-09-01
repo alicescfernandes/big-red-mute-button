@@ -135,6 +135,8 @@ public:
     NimBLECharacteristic *pCharacteristic,
     NimBLEConnInfo &connInfo) {
     NimBLEAttValue value = pCharacteristic->getValue();
+    Serial.print("Written to:");
+    Serial.println(pCharacteristic->getUUID().toString().c_str());
 
     if (pCharacteristic->getUUID().equals(NimBLEUUID(BTN_CHARACTERISTIC)) && standby_state == false) {
       // handle button write
@@ -147,7 +149,7 @@ public:
     if (pCharacteristic->getUUID().equals(NimBLEUUID(STANDBY_CHARACTERISTIC))) {
       // handle standby write
       if (value.size() > 0) {
-          standby_state = value[0] != 0;
+          standby_state = value[0] != 0;        
         }
     }
   }
@@ -203,14 +205,15 @@ void create_box_service() {
   btn_characteristic->setCallbacks(new BoxWriteCallbacks());
 
   // Add the 0x2901 User Description descriptor
-  NimBLEDescriptor *btn_description = btn_characteristic->createDescriptor("2901", NIMBLE_PROPERTY::READ_AUTHEN, 100);
+  NimBLEDescriptor *btn_description = btn_characteristic->createDescriptor("2901", NIMBLE_PROPERTY::READ | NIMBLE_PROPERTY::READ_ENC, 100);
   btn_description->setValue("Button  status (pressed / not pressed)");
 
   standby_characteristic = service->createCharacteristic(STANDBY_CHARACTERISTIC, NIMBLE_PROPERTY::READ | NIMBLE_PROPERTY::WRITE | NIMBLE_PROPERTY::READ_ENC | NIMBLE_PROPERTY::WRITE_ENC | NIMBLE_PROPERTY::READ_AUTHEN | NIMBLE_PROPERTY::WRITE_AUTHEN | NIMBLE_PROPERTY::NOTIFY);
   standby_characteristic->setValue(byte(0));  // Clients can subscribe to this, and update as they wish
+  standby_characteristic->setCallbacks(new BoxWriteCallbacks());
 
   // Add the 0x2901 User Description descriptor
-  NimBLEDescriptor *standby_description = standby_characteristic->createDescriptor("2901", NIMBLE_PROPERTY::READ_AUTHEN, 100);
+  NimBLEDescriptor *standby_description = standby_characteristic->createDescriptor("2901", NIMBLE_PROPERTY::READ | NIMBLE_PROPERTY::READ_ENC, 100);
   standby_description->setValue("Standby Mode");
 
   service->start();
@@ -275,8 +278,6 @@ void setup() {
   Serial.begin(115200);
   NimBLEDevice::init(NAME);
 
-  pinMode(RED_LED, OUTPUT);
-
   pinMode(RED_BTN, INPUT_PULLUP);
   // NimBLEDevice::deleteAllBonds();  // Dev Only
 
@@ -318,8 +319,10 @@ void loop() {
 
   /* #region Bluetooth Button */
   if (device_connected_state) {
-    Serial.println("blink_cycles_done:" + String(blink_cycles_done));
-    blinkTwice();
+
+    if(blink_cycles_done < 2){
+      blinkTwice();
+    }
 
     if (write_to_characteristic_state) {
       write_to_characteristic_state = false;

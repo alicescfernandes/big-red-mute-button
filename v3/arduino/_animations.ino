@@ -12,7 +12,7 @@ enum AnimationMode {
   ANIM_MODE_COUNT // keep last, used for cycling through modes
 };
 
-const int CYCLES_PER_ANIMATION = 6;
+const int CYCLES_PER_ANIMATION = 10;
 
 // ---------------------------------------------------------------------------
 // Each *Step function now returns true while still running a cycle, and
@@ -21,7 +21,7 @@ const int CYCLES_PER_ANIMATION = 6;
 // function signatures used elsewhere (e.g. colorWipeStep's one-shot use).
 // ---------------------------------------------------------------------------
 
-bool cometStep(unsigned long interval = 30) {
+bool cometStep(unsigned long interval = 120) {
   static unsigned long lastUpdate = 0;
   static int headPos = 0;
   const int tailLength = 5;
@@ -81,7 +81,7 @@ bool theaterChaseStep(unsigned long interval = 100) {
   return true;
 }
 
-bool twinkleStep(unsigned long interval = 60) {
+bool twinkleStep(unsigned long interval = 30) {
   static unsigned long lastUpdate = 0;
   static uint8_t levels[NUMPIXELS] = {0};
 
@@ -112,7 +112,7 @@ bool twinkleStep(unsigned long interval = 60) {
   return true;
 }
 
-bool colorWipeStep(bool filling, unsigned long interval = 40) {
+bool colorWipeStep(bool filling, unsigned long interval = 60) {
   static unsigned long lastUpdate = 0;
   static int pos = -1;
 
