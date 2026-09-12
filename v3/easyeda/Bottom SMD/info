@@ -1,0 +1,366 @@
+{
+  "uuid": "5cff5574ca1a90398a98647e15a5d2eb",
+  "path": "Offline/Bottom%20SMD",
+  "name": "Bottom SMD",
+  "content": "",
+  "created_at": "2026-09-10 21:37:39",
+  "updated_at": "2026-09-12 01:04:35",
+  "stick": "",
+  "documents": [
+    {
+      "uuid": "ee8a7db2876e47ade4742552419c446c",
+      "title": "Bottom part",
+      "description": "",
+      "docType": "1",
+      "master": "",
+      "thumb": "/images/thumb-default.png",
+      "components": {
+        "0f4055c7fa794976ae275e6e38575d80": 1,
+        "c361a51093c84935b49e4c6fc8caac53": 4,
+        "5cbe824183374fac8e4c1ae848199ce3": 4,
+        "b0248eb51e084227889f2cb84eab79c4": 2,
+        "24eeb2ceca08480b92b847b6a310acda": 8,
+        "b73c52978ff7427e859044eeb8eb1be5": 1,
+        "fd350ebe01114487bf78f72365752f63": 1,
+        "6c0d0c5e22104155878cc75ddd5ead90": 2,
+        "54ffcc9f49ed491c8a57c203f51c7666": 1,
+        "b0f4da7468d846d0887dd59629de8285": 1
+      },
+      "BOM": [
+        [
+          "Value",
+          "Quantity",
+          "Package",
+          "Components",
+          "CustomPara"
+        ],
+        [
+          "S2B-XH-A-(LF)(SN)",
+          2,
+          "CONN-TH_S2B-XH-A-LF-SN",
+          "BAT,USB_IN1",
+          {
+            "Manufacturer Part": "S2B-XH-A(LF)(SN)",
+            "Manufacturer": "JST",
+            "Supplier": "LCSC",
+            "Supplier Part": "C157931"
+          }
+        ],
+        [
+          "10uf",
+          2,
+          "C0805",
+          "C1,C2",
+          {
+            "Manufacturer Part": "",
+            "Manufacturer": "",
+            "Supplier": "LCSC",
+            "Supplier Part": "C386085"
+          }
+        ],
+        [
+          "22uf_C0805",
+          4,
+          "C0805",
+          "C3,C4,C5,C8",
+          {
+            "Manufacturer Part": "",
+            "Manufacturer": "",
+            "Supplier": "LCSC",
+            "Supplier Part": "CL21A226MAYNNNE"
+          }
+        ],
+        [
+          "22uF",
+          2,
+          "C0805",
+          "C6,C7",
+          {
+            "Manufacturer Part": "",
+            "Manufacturer": "",
+            "Supplier": "LCSC",
+            "Supplier Part": "CL21A226MAYNNNE"
+          }
+        ],
+        [
+          "1uH",
+          1,
+          "IND-SMD_L7.1-W6.6-1",
+          "L1",
+          {
+            "Manufacturer Part": "DH0630H-1R0M",
+            "Manufacturer": "DH(德鸿感应)",
+            "Supplier": "LCSC",
+            "Supplier Part": "C41407058"
+          }
+        ],
+        [
+          "LED-0805_R",
+          4,
+          "LED0805_RED",
+          "LED1,LED2,LED3,LED4",
+          {
+            "Manufacturer Part": "",
+            "Manufacturer": "",
+            "Supplier": "LCSC",
+            "Supplier Part": "C54814824"
+          }
+        ],
+        [
+          "S4B-XH-A (LF)(SN)",
+          1,
+          "CONN-TH_S4B-XH-A-LF-SN",
+          "OUTPUT",
+          {
+            "Manufacturer Part": "S4B-XH-A(LF)(SN)",
+            "Manufacturer": "JST",
+            "Supplier": "LCSC",
+            "Supplier Part": "C157925"
+          }
+        ],
+        [
+          "2R",
+          1,
+          "R0805",
+          "R1",
+          {
+            "Manufacturer Part": "",
+            "Manufacturer": "",
+            "Supplier": "LCSC",
+            "Supplier Part": "C2930265"
+          }
+        ],
+        [
+          "0.5R",
+          1,
+          "R0603",
+          "R2",
+          {
+            "Manufacturer Part": "",
+            "Manufacturer": "",
+            "Supplier": "LCSC",
+            "Supplier Part": "C2934295"
+          }
+        ],
+        [
+          "SW-T3-1A-A-A3-S1",
+          1,
+          "SW-T3-1A-A-A3-S1",
+          "SW1",
+          {
+            "Manufacturer Part": "SW-T3-1A-A-A3-S1",
+            "Manufacturer": "Adam Tech",
+            "Supplier": "Digi-Key",
+            "Supplier Part": "2057-SW-T3-1A-A-A3-S1-ND"
+          }
+        ],
+        [
+          "IP5306H",
+          1,
+          "ESOP-8_L4.9-W3.9-P1.27-LS6.0-BL-EP",
+          "U2",
+          {
+            "Manufacturer Part": "IP5306H",
+            "Manufacturer": "null",
+            "Supplier": "LCSC",
+            "Supplier Part": "C181692"
+          }
+        ]
+      ],
+      "updateTime": 1789171475,
+      "createTime": 1788624460,
+      "histories": [],
+      "created_at": "2026-09-05 17:07:40",
+      "updated_at": "2026-09-12 01:04:35"
+    },
+    {
+      "uuid": "f719bc7360c1bbff0b4985e4bfc15cd3",
+      "puuid": "5cff5574ca1a90398a98647e15a5d2eb",
+      "title": "PCB_Bottom SMD",
+      "filename": "PCB_Bottom SMD.json",
+      "description": "",
+      "docType": "3",
+      "master": "",
+      "thumb": "/images/thumb-default.png",
+      "components": {
+        "398691f1f785460098bbe5ee6590333c": 1,
+        "c9e077694ab54806aca4544641919bdc": 1,
+        "bf4a5f8d3d0f4067b2e2434b9c6eb348": 4,
+        "2ee8eb13a0124a108e622ce40c0c25a8": 8,
+        "7568fee05bc44581b2c32625ae15b3f8": 1,
+        "b60f399a7a7e41848b2be1eb49c79141": 1,
+        "53317464f86440ca8db403840fb0a1ff": 1,
+        "64304dfc6bbc40f7814d072737010e73": 2,
+        "f81e00908a77462f82a2f3e2e708f4eb": 1,
+        "090b645653374cf992fd93fb559e27d2": 4,
+        "a04057020b644da69ce4b42cfd204817": 1
+      },
+      "BOM": [
+        [
+          "Value",
+          "Quantity",
+          "Package",
+          "Components",
+          "CustomPara"
+        ],
+        [
+          "Battery Terminals",
+          1,
+          "HDR-M-2.54_1X2",
+          "BAT",
+          {
+            "Manufacturer Part": "",
+            "Manufacturer": "",
+            "Supplier": "LCSC",
+            "Supplier Part": "C124375"
+          }
+        ],
+        [
+          "USB IN",
+          1,
+          "HDR-M-2.54_1X2",
+          "USB",
+          {
+            "Manufacturer Part": "",
+            "Manufacturer": "",
+            "Supplier": "LCSC",
+            "Supplier Part": "C124375"
+          }
+        ],
+        [
+          "10uf",
+          2,
+          "C0603",
+          "C1,C2",
+          {
+            "Manufacturer Part": "",
+            "Manufacturer": "",
+            "Supplier": "",
+            "Supplier Part": ""
+          }
+        ],
+        [
+          "22uf",
+          1,
+          "C0603",
+          "C3",
+          {
+            "Manufacturer Part": "",
+            "Manufacturer": "",
+            "Supplier": "",
+            "Supplier Part": ""
+          }
+        ],
+        [
+          "22uF",
+          5,
+          "C0603",
+          "C4,C5,C6,C7,C8",
+          {
+            "Manufacturer Part": "",
+            "Manufacturer": "",
+            "Supplier": "",
+            "Supplier Part": ""
+          }
+        ],
+        [
+          "1uH",
+          1,
+          "L0603",
+          "L1",
+          {
+            "Manufacturer Part": "",
+            "Manufacturer": "",
+            "Supplier": "",
+            "Supplier Part": ""
+          }
+        ],
+        [
+          "LED-0603_R",
+          4,
+          "LED0603_RED",
+          "LED1,LED2,LED3,LED4",
+          {
+            "Manufacturer Part": "19-217/R6C-AL1M2VY/3T",
+            "Manufacturer": "EVERLIGHT(台湾亿光)",
+            "Supplier": "LCSC",
+            "Supplier Part": "C72044"
+          }
+        ],
+        [
+          "WAVESHARE-ESP32-S3-TINY",
+          1,
+          "WAVESHARE-ESP32-S3-TINY",
+          "MCU",
+          {
+            "Manufacturer Part": "ESP32-S3 Mini Development Board",
+            "Manufacturer": "WAVESHARE",
+            "Supplier": "WAVESHARE",
+            "Supplier Part": ""
+          }
+        ],
+        [
+          "output",
+          1,
+          "HDR-F-2.54_1X4",
+          "OUTPUT",
+          {
+            "Manufacturer Part": "",
+            "Manufacturer": "",
+            "Supplier": "LCSC",
+            "Supplier Part": "C225501"
+          }
+        ],
+        [
+          "2R",
+          1,
+          "R0603",
+          "R1",
+          {
+            "Manufacturer Part": "",
+            "Manufacturer": "",
+            "Supplier": "",
+            "Supplier Part": ""
+          }
+        ],
+        [
+          "0.5R",
+          1,
+          "R0603",
+          "R2",
+          {
+            "Manufacturer Part": "",
+            "Manufacturer": "",
+            "Supplier": "",
+            "Supplier Part": ""
+          }
+        ],
+        [
+          "IP5306H",
+          1,
+          "ESOP-8_L4.9-W3.9-P1.27-LS6.0-BL-EP",
+          "U2",
+          {
+            "Manufacturer Part": "IP5306H",
+            "Manufacturer": "null",
+            "Supplier": "LCSC",
+            "Supplier Part": "C49420526"
+          }
+        ]
+      ],
+      "updateTime": 1789170795,
+      "createTime": 1789081164,
+      "histories": [],
+      "created_at": "2026-09-10 23:59:24",
+      "updated_at": "2026-09-12 00:53:15"
+    }
+  ],
+  "sort": [
+    "ee8a7db2876e47ade4742552419c446c",
+    "b58283a78a46c0013b7f5ff1aac49d50"
+  ],
+  "title": "Bottom SMD",
+  "foldername": "Bottom SMD",
+  "schfilename": "Bottom SMD.json",
+  "schfilemtime": 1789171475635
+}

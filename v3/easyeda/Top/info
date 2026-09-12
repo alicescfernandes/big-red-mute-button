@@ -1,0 +1,148 @@
+{
+  "uuid": "e13cf76d8188de2c4404ef988e29059b",
+  "path": "Offline/Top",
+  "name": "Top",
+  "content": "",
+  "created_at": "2026-09-05 17:55:30",
+  "updated_at": "2026-09-06 18:22:38",
+  "stick": "",
+  "documents": [
+    {
+      "uuid": "daf4778f9e2b7b1d3b860f3c5e7f90ae",
+      "title": "Top part copy",
+      "description": "",
+      "docType": "1",
+      "master": "",
+      "thumb": "/images/thumb-default.png",
+      "components": {
+        "eaa76950fd7343a1953943ee7b9978d3": 1,
+        "a7291ceaee5442a999df26c55c7e675d": 1,
+        "19fb96523c484512915d6fbc0d6ac9dc": 1
+      },
+      "BOM": [
+        [
+          "Value",
+          "Quantity",
+          "Package",
+          "Components",
+          "CustomPara"
+        ],
+        [
+          "output",
+          1,
+          "HDR-F-2.54_1X4",
+          "INPUT",
+          {
+            "Manufacturer Part": "",
+            "Manufacturer": "",
+            "Supplier": "LCSC",
+            "Supplier Part": "C225501"
+          }
+        ],
+        [
+          "MXONLY-1U-HOTSWAP",
+          1,
+          "MXONLY-1U-HOTSWAP",
+          "K1",
+          {
+            "Manufacturer Part": "",
+            "Manufacturer": "",
+            "Supplier": "",
+            "Supplier Part": ""
+          }
+        ],
+        [
+          "NEOPIXEL",
+          1,
+          "HDR-F-2.54_1X3",
+          "NEOPIXEL",
+          {
+            "Manufacturer Part": "",
+            "Manufacturer": "",
+            "Supplier": "LCSC",
+            "Supplier Part": "C146690"
+          }
+        ]
+      ],
+      "updateTime": 1788713217,
+      "createTime": 1788627343,
+      "histories": [],
+      "created_at": "2026-09-05 17:55:43",
+      "updated_at": "2026-09-06 17:46:57"
+    },
+    {
+      "uuid": "05d39e696415a99ed5ee03cd6ef79468",
+      "puuid": "e13cf76d8188de2c4404ef988e29059b",
+      "title": "PCB_Top_2",
+      "filename": "PCB_Top_2.json",
+      "description": "",
+      "docType": "3",
+      "master": "",
+      "thumb": "/images/thumb-default.png",
+      "components": {
+        "21473b495b6340c992965357d5701779": 1,
+        "680607847b444fb3a8d964a63e206b82": 1,
+        "f83673d09e13450d934ca6be4be5af8f": 1
+      },
+      "BOM": [
+        [
+          "Value",
+          "Quantity",
+          "Package",
+          "Components",
+          "CustomPara"
+        ],
+        [
+          "output",
+          1,
+          "HDR-F-2.54_1X4",
+          "INPUT",
+          {
+            "Manufacturer Part": "",
+            "Manufacturer": "",
+            "Supplier": "LCSC",
+            "Supplier Part": "C225501"
+          }
+        ],
+        [
+          "MXONLY-1U-HOTSWAP",
+          1,
+          "MXONLY-1U-HOTSWAP",
+          "K1",
+          {
+            "Manufacturer Part": "",
+            "Manufacturer": "",
+            "Supplier": "",
+            "Supplier Part": ""
+          }
+        ],
+        [
+          "NEOPIXEL",
+          1,
+          "HDR-F-2.54_1X3",
+          "NEOPIXEL",
+          {
+            "Manufacturer Part": "",
+            "Manufacturer": "",
+            "Supplier": "LCSC",
+            "Supplier Part": "C146690"
+          }
+        ]
+      ],
+      "updateTime": 1788715358,
+      "createTime": 1788713457,
+      "histories": [],
+      "created_at": "2026-09-06 17:50:57",
+      "updated_at": "2026-09-06 18:22:38"
+    }
+  ],
+  "sort": [
+    "95015d7aaa4da66f2712a7623fb5eb40",
+    "b58283a78a46c0013b7f5ff1aac49d50",
+    "daf4778f9e2b7b1d3b860f3c5e7f90ae"
+  ],
+  "title": "Top",
+  "foldername": "Top",
+  "schfilename": "Top.json",
+  "schfilemtime": 1788713217439
+}

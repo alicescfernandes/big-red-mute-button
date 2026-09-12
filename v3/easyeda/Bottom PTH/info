@@ -1,0 +1,278 @@
+{
+  "uuid": "1cdfeebf523d84e9c2bf337d8466c844",
+  "path": "Offline/Bottom%20PTH",
+  "name": "Bottom PTH",
+  "content": "",
+  "created_at": "2026-09-05 17:07:40",
+  "updated_at": "2026-09-06 17:28:46",
+  "stick": "",
+  "documents": [
+    {
+      "uuid": "95015d7aaa4da66f2712a7623fb5eb40",
+      "title": "Bottom part",
+      "description": "",
+      "docType": "1",
+      "master": "",
+      "thumb": "/images/thumb-default.png",
+      "components": {
+        "eaa76950fd7343a1953943ee7b9978d3": 1,
+        "0f4055c7fa794976ae275e6e38575d80": 1,
+        "3ec77201bbcd4ecd8722658d581a4e60": 1,
+        "a9aa2b14f188405792fa87ac344499a4": 1,
+        "d11ef9e4da6c45cfa82562b40fcdf65d": 1,
+        "c361a51093c84935b49e4c6fc8caac53": 4
+      },
+      "BOM": [
+        [
+          "Value",
+          "Quantity",
+          "Package",
+          "Components",
+          "CustomPara"
+        ],
+        [
+          "Input",
+          1,
+          "HDR-F-2.54_1X2",
+          "BAT",
+          {
+            "Manufacturer Part": "",
+            "Manufacturer": "",
+            "Supplier": "LCSC",
+            "Supplier Part": "C49661"
+          }
+        ],
+        [
+          "2A_5V_CHARGE_DISCHARGE_INTEGRATED_3.7V_4.2V_LITHIUM_BATTERY_BOOST_WASN",
+          1,
+          "LITHIUM BATTERY CHARGE/DISCHARGE",
+          "CHARGE",
+          {
+            "Manufacturer Part": "2A_5V_Charge_Discharge_Integrated_3.7V_4.2V_Lithium_Battery_Boost_Mobile",
+            "Manufacturer": "",
+            "Supplier": "",
+            "Supplier Part": ""
+          }
+        ],
+        [
+          "WAVESHARE-ESP32-S3-TINY",
+          1,
+          "WAVESHARE-ESP32-S3-TINY",
+          "MCU",
+          {
+            "Manufacturer Part": "ESP32-S3 Mini Development Board",
+            "Manufacturer": "WAVESHARE",
+            "Supplier": "WAVESHARE",
+            "Supplier Part": ""
+          }
+        ],
+        [
+          "output",
+          1,
+          "HDR-F-2.54_1X4",
+          "OUTPUT",
+          {
+            "Manufacturer Part": "",
+            "Manufacturer": "",
+            "Supplier": "LCSC",
+            "Supplier Part": "C225501"
+          }
+        ],
+        [
+          "Screw-M2",
+          4,
+          "SCREW-M2",
+          "SCREW1,SCREW2,SCREW3,SCREW4",
+          {
+            "Manufacturer Part": "",
+            "Manufacturer": "",
+            "Supplier": "",
+            "Supplier Part": ""
+          }
+        ],
+        [
+          "HDR-M-2.54_1x2",
+          1,
+          "HDR-M-2.54_1X2",
+          "USB",
+          {
+            "Manufacturer Part": "",
+            "Manufacturer": "",
+            "Supplier": "LCSC",
+            "Supplier Part": "C124375"
+          }
+        ]
+      ],
+      "updateTime": 1788712126,
+      "createTime": 1788624460,
+      "histories": [],
+      "created_at": "2026-09-05 17:07:40",
+      "updated_at": "2026-09-06 17:28:46"
+    },
+    {
+      "uuid": "31dbed10d0f1762d9178bfa54e90d163",
+      "puuid": "1cdfeebf523d84e9c2bf337d8466c844",
+      "title": "PCB_New Project",
+      "filename": "PCB_New Project.json",
+      "description": "",
+      "docType": "3",
+      "master": "",
+      "thumb": "/images/thumb-default.png",
+      "components": {
+        "36b1306a115341f4b4d9407fb34974e0": 1,
+        "21473b495b6340c992965357d5701779": 1,
+        "c9e077694ab54806aca4544641919bdc": 1
+      },
+      "BOM": [
+        [
+          "Value",
+          "Quantity",
+          "Package",
+          "Components",
+          "CustomPara"
+        ],
+        [
+          "Input",
+          1,
+          "HDR-F-2.54_1X2",
+          "H3",
+          {
+            "Manufacturer Part": "",
+            "Manufacturer": "",
+            "Supplier": "LCSC",
+            "Supplier Part": "C49661"
+          }
+        ],
+        [
+          "output",
+          1,
+          "HDR-F-2.54_1X4",
+          "H4",
+          {
+            "Manufacturer Part": "",
+            "Manufacturer": "",
+            "Supplier": "LCSC",
+            "Supplier Part": "C225501"
+          }
+        ],
+        [
+          "WAVESHARE-ESP32-S3-TINY",
+          1,
+          "WAVESHARE-ESP32-S3-TINY",
+          "U2",
+          {
+            "Manufacturer Part": "ESP32-S3 Mini Development Board",
+            "Manufacturer": "WAVESHARE",
+            "Supplier": "WAVESHARE",
+            "Supplier Part": ""
+          }
+        ]
+      ],
+      "updateTime": 1788636256,
+      "createTime": 1788626497,
+      "histories": [],
+      "created_at": "2026-09-05 17:41:37",
+      "updated_at": "2026-09-05 20:24:16"
+    },
+    {
+      "uuid": "d8e20323795fe5de7a6b1cf25b1c96ef",
+      "puuid": "1cdfeebf523d84e9c2bf337d8466c844",
+      "title": "PCB_New Project_2",
+      "filename": "PCB_New Project_2.json",
+      "description": "",
+      "docType": "3",
+      "master": "",
+      "thumb": "/images/thumb-default.png",
+      "components": {
+        "bf4a5f8d3d0f4067b2e2434b9c6eb348": 4,
+        "36b1306a115341f4b4d9407fb34974e0": 1,
+        "ec6f83bfa701425b9920e0d7aa84dbed": 1,
+        "c9e077694ab54806aca4544641919bdc": 1,
+        "21473b495b6340c992965357d5701779": 1,
+        "70aa5812f21f4991bf427395d51849f4": 1
+      },
+      "BOM": [
+        [
+          "Value",
+          "Quantity",
+          "Package",
+          "Components",
+          "CustomPara"
+        ],
+        [
+          "Input",
+          1,
+          "HDR-F-2.54_1X2",
+          "BAT",
+          {
+            "Manufacturer Part": "",
+            "Manufacturer": "",
+            "Supplier": "LCSC",
+            "Supplier Part": "C49661"
+          }
+        ],
+        [
+          "2A_5V_CHARGE_DISCHARGE_INTEGRATED_3.7V_4.2V_LITHIUM_BATTERY_BOOST_WASN",
+          1,
+          "LITHIUM BATTERY CHARGE/DISCHARGE",
+          "CHARGE",
+          {
+            "Manufacturer Part": "2A_5V_Charge_Discharge_Integrated_3.7V_4.2V_Lithium_Battery_Boost_Mobile",
+            "Manufacturer": "",
+            "Supplier": "",
+            "Supplier Part": ""
+          }
+        ],
+        [
+          "WAVESHARE-ESP32-S3-TINY",
+          1,
+          "WAVESHARE-ESP32-S3-TINY",
+          "MCU",
+          {
+            "Manufacturer Part": "ESP32-S3 Mini Development Board",
+            "Manufacturer": "WAVESHARE",
+            "Supplier": "WAVESHARE",
+            "Supplier Part": ""
+          }
+        ],
+        [
+          "output",
+          1,
+          "HDR-F-2.54_1X4",
+          "OUTPUT",
+          {
+            "Manufacturer Part": "",
+            "Manufacturer": "",
+            "Supplier": "LCSC",
+            "Supplier Part": "C225501"
+          }
+        ],
+        [
+          "HDR-M-2.54_1x2",
+          1,
+          "HDR-M-2.54_1X2",
+          "USB",
+          {
+            "Manufacturer Part": "",
+            "Manufacturer": "",
+            "Supplier": "LCSC",
+            "Supplier Part": "C124375"
+          }
+        ]
+      ],
+      "updateTime": 1788711928,
+      "createTime": 1788636880,
+      "histories": [],
+      "created_at": "2026-09-05 20:34:40",
+      "updated_at": "2026-09-06 17:25:28"
+    }
+  ],
+  "sort": [
+    "95015d7aaa4da66f2712a7623fb5eb40",
+    "b58283a78a46c0013b7f5ff1aac49d50"
+  ],
+  "title": "Bottom PTH",
+  "foldername": "Bottom PTH",
+  "schfilename": "New Project.json",
+  "schfilemtime": 1788712126954
+}
