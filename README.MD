@@ -10,9 +10,9 @@ The device uses BLE (Bluetooth Low Energy) to communicate wirelessly via Bluetoo
 
 What led me to redo the BRB (🔴) _again_ was the desire to make the perfect button, and that meant that v1 and v2 were not perfect. For one, the v2 project kept restarting on battery, and i just had way to many wires. The button itself was big and noisy, and used a 12V LED that i could barely see and needed a boost converter to take 5V into 12V.
 
-For this revision, i wanted all on 5V, which meant rebuilding the button itself. Since i had a few spare keyboard CHerry MX switches and a Neopixel that i ended up storing away, i've settled on using those parts for this revision. For the dome part, i decided to take a part the red button of V1, and repurposed the battery of V2.
+For this revision, i wanted all on 5V, which meant rebuilding the button itself. Since i had a few spare keyboard Cherry MX switches and a Neopixel that i ended up storing away, i've settled on using those parts for this revision. For the dome part, i decided to take apart the red button of V1, and repurposed the battery of V2.
 
-I experimented _ a lot_ on this revision. Went with magnetic connectors for the bottom and top part, custom made PCBs (i designed them myself, and even milled one on a CNC device), a big (i mean _huge_) keycap for the Cherry MX with 12 powerful 5V LEDS! The "net new" parts ended up being a IP5603 module to manage the charging of the battery and a few accessory parts for the enclosure.
+I experimented _a lot_ on this revision. Went with magnetic connectors for the bottom and top part, custom made PCBs (i designed them myself, and even milled one on a CNC device), a big (i mean _huge_) keycap for the Cherry MX with 12 powerful 5V LEDS! The "net new" parts ended up being a IP5603 module to manage the charging of the battery and a few accessory parts for the enclosure.
 
 ### Why not TP4056?
 
@@ -21,7 +21,7 @@ I researched a lot about battery management IC's, and ended up with 3 options: T
 - IP5603 does transform the power to 5V, but it only provides visual indicators for battery percentage. It's also relatively simple to build a circuit around this one
 - BQ258 provides a 5V power and battery percentage over I2C protocol, which is awesome, but the reference circuit is a bit too scary for me to try!
 
-The good news is that, since i've incorporated IP5306 into my own circuit, i can just change the battery management into any other of those options without rebuilding the whole schematic! I'll try this later just for fun, and because i wanna try incorporating BQ258 because of those I2C features!
+The good news is that, since i've incorporated IP5306 into my own circuit, i can just change the battery management into any other of those options without rebuilding the whole schematic! I'll try this later just for fun, and because i wanna try incorporating BQ2585 because of those I2C features!
 
 ### Software used
 - EasyEDA for schematic and PCB Design
