@@ -1,10 +1,10 @@
 {
   "uuid": "5cff5574ca1a90398a98647e15a5d2eb",
-  "path": "Offline/Bottom%20SMD",
+  "path": "Offline/Bottom SMD",
   "name": "Bottom SMD",
   "content": "",
   "created_at": "2026-09-10 21:37:39",
-  "updated_at": "2026-09-12 01:04:35",
+  "updated_at": "2026-09-12 21:07:15",
   "stick": "",
   "documents": [
     {
@@ -16,7 +16,6 @@
       "thumb": "/images/thumb-default.png",
       "components": {
         "0f4055c7fa794976ae275e6e38575d80": 1,
-        "c361a51093c84935b49e4c6fc8caac53": 4,
         "5cbe824183374fac8e4c1ae848199ce3": 4,
         "b0248eb51e084227889f2cb84eab79c4": 2,
         "24eeb2ceca08480b92b847b6a310acda": 8,
@@ -49,37 +48,25 @@
         [
           "10uf",
           2,
-          "C0805",
+          "C1206",
           "C1,C2",
           {
             "Manufacturer Part": "",
             "Manufacturer": "",
             "Supplier": "LCSC",
-            "Supplier Part": "C386085"
+            "Supplier Part": "C13585"
           }
         ],
         [
           "22uf_C0805",
-          4,
+          6,
           "C0805",
-          "C3,C4,C5,C8",
+          "C3,C4,C5,C6,C7,C8",
           {
             "Manufacturer Part": "",
             "Manufacturer": "",
             "Supplier": "LCSC",
-            "Supplier Part": "CL21A226MAYNNNE"
-          }
-        ],
-        [
-          "22uF",
-          2,
-          "C0805",
-          "C6,C7",
-          {
-            "Manufacturer Part": "",
-            "Manufacturer": "",
-            "Supplier": "LCSC",
-            "Supplier Part": "CL21A226MAYNNNE"
+            "Supplier Part": "C45783"
           }
         ],
         [
@@ -103,7 +90,7 @@
             "Manufacturer Part": "",
             "Manufacturer": "",
             "Supplier": "LCSC",
-            "Supplier Part": "C54814824"
+            "Supplier Part": "C34499"
           }
         ],
         [
@@ -121,13 +108,13 @@
         [
           "2R",
           1,
-          "R0805",
+          "R0603",
           "R1",
           {
             "Manufacturer Part": "",
             "Manufacturer": "",
             "Supplier": "LCSC",
-            "Supplier Part": "C2930265"
+            "Supplier Part": "C22977"
           }
         ],
         [
@@ -139,19 +126,7 @@
             "Manufacturer Part": "",
             "Manufacturer": "",
             "Supplier": "LCSC",
-            "Supplier Part": "C2934295"
-          }
-        ],
-        [
-          "SW-T3-1A-A-A3-S1",
-          1,
-          "SW-T3-1A-A-A3-S1",
-          "SW1",
-          {
-            "Manufacturer Part": "SW-T3-1A-A-A3-S1",
-            "Manufacturer": "Adam Tech",
-            "Supplier": "Digi-Key",
-            "Supplier Part": "2057-SW-T3-1A-A-A3-S1-ND"
+            "Supplier Part": "C2934253"
           }
         ],
         [
@@ -167,11 +142,11 @@
           }
         ]
       ],
-      "updateTime": 1789171475,
+      "updateTime": 1789242198,
       "createTime": 1788624460,
       "histories": [],
       "created_at": "2026-09-05 17:07:40",
-      "updated_at": "2026-09-12 01:04:35"
+      "updated_at": "2026-09-12 20:43:18"
     },
     {
       "uuid": "f719bc7360c1bbff0b4985e4bfc15cd3",
@@ -183,14 +158,13 @@
       "master": "",
       "thumb": "/images/thumb-default.png",
       "components": {
-        "398691f1f785460098bbe5ee6590333c": 1,
-        "c9e077694ab54806aca4544641919bdc": 1,
-        "bf4a5f8d3d0f4067b2e2434b9c6eb348": 4,
-        "2ee8eb13a0124a108e622ce40c0c25a8": 8,
-        "7568fee05bc44581b2c32625ae15b3f8": 1,
-        "b60f399a7a7e41848b2be1eb49c79141": 1,
-        "53317464f86440ca8db403840fb0a1ff": 1,
+        "7bdec8012728462a85919a4d0d033579": 2,
+        "398691f1f785460098bbe5ee6590333c": 2,
+        "2ee8eb13a0124a108e622ce40c0c25a8": 6,
         "64304dfc6bbc40f7814d072737010e73": 2,
+        "c9e077694ab54806aca4544641919bdc": 1,
+        "7568fee05bc44581b2c32625ae15b3f8": 1,
+        "53317464f86440ca8db403840fb0a1ff": 1,
         "f81e00908a77462f82a2f3e2e708f4eb": 1,
         "090b645653374cf992fd93fb559e27d2": 4,
         "a04057020b644da69ce4b42cfd204817": 1
@@ -348,11 +322,11 @@
           }
         ]
       ],
-      "updateTime": 1789170795,
+      "updateTime": 1789243635,
       "createTime": 1789081164,
       "histories": [],
       "created_at": "2026-09-10 23:59:24",
-      "updated_at": "2026-09-12 00:53:15"
+      "updated_at": "2026-09-12 21:07:15"
     }
   ],
   "sort": [
@@ -362,5 +336,5 @@
   "title": "Bottom SMD",
   "foldername": "Bottom SMD",
   "schfilename": "Bottom SMD.json",
-  "schfilemtime": 1789171475635
+  "schfilemtime": 1789242198763
 }
