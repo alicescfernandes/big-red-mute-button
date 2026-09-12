@@ -16,10 +16,10 @@ I experimented _a lot_ on this revision. Went with magnetic connectors for the b
 
 ### Why not TP4056?
 
-I researched a lot about battery management IC's, and ended up with 3 options: TP4056, IP5603  and the BQ258. They all have advantages:
-- TP4046 is the simplest of them all, but doesn't transform the output of the battery to 5V, and i really need those 5V
+I researched a lot about battery management IC's, and ended up with 3 options: TP4056, IP5603  and the BQ25895. They all have advantages:
+- TP4046 is the simplest of them all, but doesn't transform the output of the battery to 5V, and i really need those 5V. You can definitely add a boost circuit for the output, but i didn't want to bother with that
 - IP5603 does transform the power to 5V, but it only provides visual indicators for battery percentage. It's also relatively simple to build a circuit around this one
-- BQ258 provides a 5V power and battery percentage over I2C protocol, which is awesome, but the reference circuit is a bit too scary for me to try!
+- BQ25895 can provide a 5V power and battery percentage information over I2C protocol, which is awesome, but the reference circuit is a bit too scary for me to try, and it's a bit outta my league.
 
 The good news is that, since i've incorporated IP5306 into my own circuit, i can just change the battery management into any other of those options without rebuilding the whole schematic! I'll try this later just for fun, and because i wanna try incorporating BQ2585 because of those I2C features!
 
