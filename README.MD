@@ -38,7 +38,7 @@ The fake mouse is needed for Windows and MacOS, that refuse to accept input of d
 
 ### BLE Services and Characteristics
 
-In Bluetooth Low Energy (BLE), communication is structured around services and characteristics. A service is a collection of related functionality—like a HID service for mouse input or a battery service for reporting battery level. Each service contains one or more characteristics, which represent individual pieces of data that can be read, written, or notified.
+In Bluetooth Low Energy (BLE), communication is structured around services and characteristics. A service is a collection of related functionality, like a HID service for mouse input or a battery service for reporting battery level. Each service contains one or more characteristics, which represent individual pieces of data that can be read, written, or notified.
 
 For example, this device implements:
 
