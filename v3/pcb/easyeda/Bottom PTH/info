@@ -4,7 +4,7 @@
   "name": "Bottom PTH",
   "content": "",
   "created_at": "2026-09-05 17:07:40",
-  "updated_at": "2026-09-06 17:28:46",
+  "updated_at": "2026-09-14 20:08:59",
   "stick": "",
   "documents": [
     {
@@ -108,71 +108,6 @@
       "histories": [],
       "created_at": "2026-09-05 17:07:40",
       "updated_at": "2026-09-06 17:28:46"
-    },
-    {
-      "uuid": "31dbed10d0f1762d9178bfa54e90d163",
-      "puuid": "1cdfeebf523d84e9c2bf337d8466c844",
-      "title": "PCB_New Project",
-      "filename": "PCB_New Project.json",
-      "description": "",
-      "docType": "3",
-      "master": "",
-      "thumb": "/images/thumb-default.png",
-      "components": {
-        "36b1306a115341f4b4d9407fb34974e0": 1,
-        "21473b495b6340c992965357d5701779": 1,
-        "c9e077694ab54806aca4544641919bdc": 1
-      },
-      "BOM": [
-        [
-          "Value",
-          "Quantity",
-          "Package",
-          "Components",
-          "CustomPara"
-        ],
-        [
-          "Input",
-          1,
-          "HDR-F-2.54_1X2",
-          "H3",
-          {
-            "Manufacturer Part": "",
-            "Manufacturer": "",
-            "Supplier": "LCSC",
-            "Supplier Part": "C49661"
-          }
-        ],
-        [
-          "output",
-          1,
-          "HDR-F-2.54_1X4",
-          "H4",
-          {
-            "Manufacturer Part": "",
-            "Manufacturer": "",
-            "Supplier": "LCSC",
-            "Supplier Part": "C225501"
-          }
-        ],
-        [
-          "WAVESHARE-ESP32-S3-TINY",
-          1,
-          "WAVESHARE-ESP32-S3-TINY",
-          "U2",
-          {
-            "Manufacturer Part": "ESP32-S3 Mini Development Board",
-            "Manufacturer": "WAVESHARE",
-            "Supplier": "WAVESHARE",
-            "Supplier Part": ""
-          }
-        ]
-      ],
-      "updateTime": 1788636256,
-      "createTime": 1788626497,
-      "histories": [],
-      "created_at": "2026-09-05 17:41:37",
-      "updated_at": "2026-09-05 20:24:16"
     },
     {
       "uuid": "d8e20323795fe5de7a6b1cf25b1c96ef",

@@ -1,0 +1,162 @@
+{
+  "uuid": "9fca643dc332682c21d4b6a4c57bf314",
+  "path": "Offline/Top%20SMD",
+  "name": "Top SMD",
+  "content": "",
+  "created_at": "2026-09-14 20:09:08",
+  "updated_at": "2026-09-15 21:50:22",
+  "stick": "",
+  "documents": [
+    {
+      "uuid": "cb5ffcd2ae56d9c96eb384eadc1dbd56",
+      "title": "Top part copy",
+      "description": "",
+      "docType": "1",
+      "master": "",
+      "thumb": "/images/thumb-default.png",
+      "components": {
+        "eaa76950fd7343a1953943ee7b9978d3": 1,
+        "eb690fc343e244e487ad4e147f0292ae": 12,
+        "b82150387a2041b4afd55b90c79c5923": 12,
+        "cb4be21861c44fd29d7959829f678f27": 1
+      },
+      "BOM": [
+        [
+          "Value",
+          "Quantity",
+          "Package",
+          "Components",
+          "CustomPara"
+        ],
+        [
+          "0.1u",
+          12,
+          "C0805",
+          "C1,C2,C3,C4,C5,C6,C7,C8,C9,C10,C11,C12",
+          {
+            "Manufacturer Part": "",
+            "Manufacturer": "",
+            "Supplier": "",
+            "Supplier Part": ""
+          }
+        ],
+        [
+          "output",
+          1,
+          "HDR-F-2.54_1X4",
+          "INPUT",
+          {
+            "Manufacturer Part": "",
+            "Manufacturer": "",
+            "Supplier": "LCSC",
+            "Supplier Part": "C225501"
+          }
+        ],
+        [
+          "WS2812BSMD",
+          12,
+          "WS2812B",
+          "L1,L2,L3,L4,L5,L6,L7,L8,L9,L10,L11,L12",
+          {
+            "Manufacturer Part": "",
+            "Manufacturer": "",
+            "Supplier": "",
+            "Supplier Part": ""
+          }
+        ],
+        [
+          "CPG151101S11-16",
+          1,
+          "SMD_KEYBOARD-SW",
+          "U1",
+          {
+            "Manufacturer Part": "CPG151101S11-16",
+            "Manufacturer": "Kailh(凯华)",
+            "Supplier": "LCSC",
+            "Supplier Part": "C5156480"
+          }
+        ]
+      ],
+      "updateTime": 1789502821,
+      "createTime": 1788627343,
+      "histories": [],
+      "created_at": "2026-09-05 17:55:43",
+      "updated_at": "2026-09-15 21:07:01"
+    },
+    {
+      "uuid": "12b6e65a4bd22915769a8bd38652d61f",
+      "title": "PCB_Top_2",
+      "filename": "PCB_Top_2.json",
+      "description": "",
+      "docType": "3",
+      "master": "",
+      "thumb": "/images/thumb-default.png",
+      "components": {
+        "2ee8eb13a0124a108e622ce40c0c25a8": 12,
+        "22e294403d7448efbfb9e4daefec4cce": 12,
+        "21473b495b6340c992965357d5701779": 1,
+        "7d3deb8c9cc1453cb36fa4eb9b2be24a": 1,
+        "e4bcadffdc41449e99465ac64cc27cc2": 1
+      },
+      "BOM": [
+        [
+          "Value",
+          "Quantity",
+          "Package",
+          "Components",
+          "CustomPara"
+        ],
+        [
+          "output",
+          1,
+          "HDR-F-2.54_1X4",
+          "INPUT",
+          {
+            "Manufacturer Part": "",
+            "Manufacturer": "",
+            "Supplier": "LCSC",
+            "Supplier Part": "C225501"
+          }
+        ],
+        [
+          "MXONLY-1U-HOTSWAP",
+          1,
+          "MXONLY-1U-HOTSWAP",
+          "K1",
+          {
+            "Manufacturer Part": "",
+            "Manufacturer": "",
+            "Supplier": "",
+            "Supplier Part": ""
+          }
+        ],
+        [
+          "NEOPIXEL",
+          1,
+          "HDR-F-2.54_1X3",
+          "NEOPIXEL",
+          {
+            "Manufacturer Part": "",
+            "Manufacturer": "",
+            "Supplier": "LCSC",
+            "Supplier Part": "C146690"
+          }
+        ]
+      ],
+      "updateTime": 1789505422,
+      "createTime": 1788713457,
+      "histories": [],
+      "created_at": "2026-09-06 17:50:57",
+      "updated_at": "2026-09-15 21:50:22"
+    }
+  ],
+  "sort": [
+    "95015d7aaa4da66f2712a7623fb5eb40",
+    "b58283a78a46c0013b7f5ff1aac49d50",
+    "cb5ffcd2ae56d9c96eb384eadc1dbd56"
+  ],
+  "title": "Top SMD",
+  "foldername": "Top SMD",
+  "schfilename": "Top SMD.json",
+  "schfilemtime": 1789502821156
+}
