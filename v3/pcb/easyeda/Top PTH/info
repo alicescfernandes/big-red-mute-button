@@ -4,7 +4,7 @@
   "name": "Top PTH",
   "content": "",
   "created_at": "2026-09-05 17:55:30",
-  "updated_at": "2026-09-06 18:22:38",
+  "updated_at": "2026-09-15 22:14:38",
   "stick": "",
   "documents": [
     {
@@ -81,8 +81,8 @@
       "thumb": "/images/thumb-default.png",
       "components": {
         "21473b495b6340c992965357d5701779": 1,
-        "680607847b444fb3a8d964a63e206b82": 1,
-        "f83673d09e13450d934ca6be4be5af8f": 1
+        "f83673d09e13450d934ca6be4be5af8f": 1,
+        "680607847b444fb3a8d964a63e206b82": 1
       },
       "BOM": [
         [
@@ -129,11 +129,11 @@
           }
         ]
       ],
-      "updateTime": 1788715358,
+      "updateTime": 1789506878,
       "createTime": 1788713457,
       "histories": [],
       "created_at": "2026-09-06 17:50:57",
-      "updated_at": "2026-09-06 18:22:38"
+      "updated_at": "2026-09-15 22:14:38"
     }
   ],
   "sort": [
