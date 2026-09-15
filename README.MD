@@ -14,6 +14,8 @@ For this revision, i wanted all on 5V, which meant rebuilding the button itself.
 
 I experimented _a lot_ on this revision. Went with magnetic connectors for the bottom and top part, custom made PCBs (i designed them myself, and even milled one on a CNC device), a big (i mean _huge_) keycap for the Cherry MX with 12 powerful 5V LEDS! The "net new" parts ended up being a IP5603 module to manage the charging of the battery and a few accessory parts for the enclosure.
 
+I ended designing 2 versions of both top and bottom PCB's, a surface mount version and a through hole version, I ended up designing them as a experiment and learning exercise!
+
 ### Why not TP4056?
 
 I researched a lot about battery management IC's, and ended up with 3 options: TP4056, IP5603  and the BQ25895. They all have advantages:
