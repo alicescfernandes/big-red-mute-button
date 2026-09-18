@@ -1,4 +1,4 @@
-# 🔴 Big Red Button (BRB for short)
+# [WIP] 🔴 Big Red Button (BRB for short)
 
 ## A wireless bluetooth button that does anything
 
@@ -18,17 +18,49 @@ I ended designing 2 versions of both top and bottom PCB's, a surface mount versi
 
 ### Why not TP4056?
 
-I researched a lot about battery management IC's, and ended up with 3 options: TP4056, IP5603  and the BQ25895. They all have advantages:
-- TP4046 is the simplest of them all, but doesn't transform the output of the battery to 5V, and i really need those 5V. You can definitely add a boost circuit for the output, but i didn't want to bother with that
-- IP5603 does transform the power to 5V, but it only provides visual indicators for battery percentage. It's also relatively simple to build a circuit around this one
-- BQ25895 can provide a 5V power and battery percentage information over I2C protocol, which is awesome, but the reference circuit is a bit too scary for me to try, and it's a bit outta my league.
+I researched a lot about battery management IC's, and had to make a fiww design options early on, so i could find the chip that i would need. My requirements were:
+- Needs a power path, meaning that it can be used while charging
+- Needs to be suitable for low charging currents, or the charging current should be configurable
+- Needs to be suitable for LiPo pouch cells.
+- It would be nice to have I2C for battery percentage
+- It would be nice to have an integrated boost converter 
 
-The good news is that, since i've incorporated IP5306 into my own circuit, i can just change the battery management into any other of those options without rebuilding the whole schematic! I'll try this later just for fun, and because i wanna try incorporating BQ2585 because of those I2C features!
+After my research, ended up with a few options:  TP4056, IP5603, BQ25185, BQ25895, MCP73871. They all have advantages:
+- TP4046 is the simplest of them all, but doesn't transform the output of the battery to 5V, and i really need those 5V. You can definitely add a boost circuit for the output, but i didn't want to bother with that
+- IP5603 does transform the power to 5V, but it only provides visual indicators for battery percentage. It's also relatively simple to build a circuit around this one. However, this chip uses a pushbutton to enable / disable the battery power and it's not suitable for LiPo pouch cells as it charges with high currents, more suitable for 18650 battery packs
+- BQ25895 can provide a 5V power and battery percentage information over I2C protocol, which is awesome, but the reference circuit is a bit too scary for me to try, and it's a bit outta my league.
+- BQ25185 ticks a lot of those boxes. It has a power path, i can configure to charge on low currents which makes it suitable for my LiPo cell. However, i'll have to add my own boost converter to get stable 5V and 1A out of the battery.
+- MCP73871 is in some ways just a simple version of the BQ25185, with less features and a easier footprint to handle. It still needs to boost converter.
+
+Ultimately, I decided to go with a BQ25895 +  TPS61023 combo, since i was able to find a test board that i could use on a breadboard to validate the design.
 
 ### Software used
 - EasyEDA for schematic and PCB Design
 - Flatcam for board milling
 - Arduino IDE to code the ESP32's
+
+#### Parts List (Bottom)
+- ESP32-S3-Tiny
+- BQ25185DLHR (Battery Charger)
+     - configured for 300ma charge rate 
+     - and 500ma input rate
+     - 74438357010 Inductor (recommended by datasheet)
+     - X5R Capacitors (recommended by datasheet, for cost)
+- TPS61023DRLR
+    - Configured for 5V, 1.1A
+- L584070 (CELLEVIA) LiPo Battery
+- Panel-mounted USB Port (with resistors on CC1 & CC2)
+
+#### Parts List (Top)
+- Cherry MX Red
+- 12 WS2812 LEDs wired in a ring configuration 
+
+### Detailed PCB Specs
+
+The electronics themselves are wired on two separate PCBs: the top PCB that has the lights and buttons, and the bottom PCB handles the power and logic control. The PCB's are then connected together.
+
+The PCB's were designed to be 2 Layers (Signal, Ground) on the bottom PCB  and 4 layers (VCC, Ground, Signal, Ground) on the Top PCB
+
 
 ## Inner workings
 
@@ -52,24 +84,23 @@ For example, this device implements:
 
 Yes, with the help of some python code we can make the mic mute globally, trigger a lock screen or just rick-roll somebody. The host application was built using Rumps and Python to build a menu bar GUI. I'm not sure if this is compatible with Linux and Windows but at least works on Mac (:joy:)
 
-
-
 ## Assembling one yourself
 
 ### Bill of Materials (if you wanna build it yourself)
 
 - [Waveshare ESP32-Tiny](https://www.waveshare.com/esp32-s3-tiny.htm) or a [Seed XIAO ESP32-S3](https://www.seeedstudio.com/XIAO-ESP32S3-p-5627.html)
 - [Big Dome Pushbutton](https://www.sparkfun.com/products/9181), you will need just the "dome" part
-- IP5306 lithium battery module
+- [BQ2185 Charger Board](https://www.adafruit.com/product/6092)
 - USB power input via:
     - A USB Panel mount to 2 wires (something like this https://www.adafruit.com/product/6072, that has a red and a black wire)
     - A USB-C 5V PD decoy chip (pay attention to the 5V, it needs to be 5V)
 - A Lithium Battery (mind the Amps)
-- A 12 RGB LED Neopixel (https://www.adafruit.com/product/1643)
+- A 12 RGB LED NeoPixel (https://www.adafruit.com/product/1643)
 - A Cherry MX Switch (any type)
-- And a Neokey breakout board (https://www.adafruit.com/product/4978, or you can just use a cherry mx like a simple button)
+- And a NeoKey breakout board (https://www.adafruit.com/product/4978, or you can just use a cherry mx like a simple button)
 
 ## Easy circuit to follow 
+
 Assemble your parts like the image below
 
 >[!IMPORTANT]
