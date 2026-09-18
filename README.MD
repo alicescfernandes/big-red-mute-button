@@ -90,7 +90,7 @@ Yes, with the help of some python code we can make the mic mute globally, trigge
 
 - [Waveshare ESP32-Tiny](https://www.waveshare.com/esp32-s3-tiny.htm) or a [Seed XIAO ESP32-S3](https://www.seeedstudio.com/XIAO-ESP32S3-p-5627.html)
 - [Big Dome Pushbutton](https://www.sparkfun.com/products/9181), you will need just the "dome" part
-- [BQ2185 Charger Board](https://www.adafruit.com/product/6092)
+- [Adafruit BQ2185 Charger with 5V Booster](https://www.adafruit.com/product/6106) or [SeedStudio Lipo Rider Plus](https://www.seeedstudio.com/Lipo-Rider-Plus-p-4204.html), both work for Li-ion Pouch Cells, and both are USB-C
 - USB power input via:
     - A USB Panel mount to 2 wires (something like this https://www.adafruit.com/product/6072, that has a red and a black wire)
     - A USB-C 5V PD decoy chip (pay attention to the 5V, it needs to be 5V)
