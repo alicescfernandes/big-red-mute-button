@@ -25,9 +25,10 @@ I researched a lot about battery management IC's, and had to make a fiww design 
 - It would be nice to have I2C for battery percentage
 - It would be nice to have an integrated boost converter 
 
-After my research, ended up with a few options:  TP4056, IP5603, BQ25185, BQ25895, MCP73871. They all have advantages:
+After my research, ended up with a few options:  TP4056, IP5603, BQ25185, BQ25895, MCP73871 and ETA9740. They all have advantages:
 - TP4046 is the simplest of them all, but doesn't transform the output of the battery to 5V, and i really need those 5V. You can definitely add a boost circuit for the output, but i didn't want to bother with that
 - IP5603 does transform the power to 5V, but it only provides visual indicators for battery percentage. It's also relatively simple to build a circuit around this one. However, this chip uses a pushbutton to enable / disable the battery power and it's not suitable for LiPo pouch cells as it charges with high currents, more suitable for 18650 battery packs
+- ETA9740 is very similar to IP5603, however it doesn't allow me to configure a smaller charge current than 2amps, and i need a charging rate of 300ma
 - BQ25895 can provide a 5V power and battery percentage information over I2C protocol, which is awesome, but the reference circuit is a bit too scary for me to try, and it's a bit outta my league.
 - BQ25185 ticks a lot of those boxes. It has a power path, i can configure to charge on low currents which makes it suitable for my LiPo cell. However, i'll have to add my own boost converter to get stable 5V and 1A out of the battery.
 - MCP73871 is in some ways just a simple version of the BQ25185, with less features and a easier footprint to handle. It still needs to boost converter.
