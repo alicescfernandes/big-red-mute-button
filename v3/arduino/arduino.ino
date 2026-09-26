@@ -60,6 +60,7 @@ void write_value(NimBLECharacteristic *c, int value) {
 bool breatheStep(BreatheMode mode, unsigned long interval = 5) {
   static unsigned long lastUpdate = 0;
   static BreatheMode lastMode = BREATHE_IN;
+  int maxBrightness = getUserBrightness();
 
   // Reset state whenever the mode changes (fresh start each time it's selected)
   if (mode != lastMode) {
@@ -70,7 +71,7 @@ bool breatheStep(BreatheMode mode, unsigned long interval = 5) {
         step = 1;
         break;
       case BREATHE_OUT:
-        brightness = 255;
+        brightness = maxBrightness;
         step = -1;
         break;
       case BREATHE_IN_OUT:
@@ -88,15 +89,15 @@ bool breatheStep(BreatheMode mode, unsigned long interval = 5) {
 
     // Reverse direction only in IN_OUT mode
     if (mode == BREATHE_IN_OUT) {
-      if (brightness >= 255) {
-        brightness = 255;
+      if (brightness >= maxBrightness) {
+        brightness = maxBrightness;
         step = -1;
       } else if (brightness <= 0) {
         brightness = 0;
         step = 1;
       }
     } else {
-      brightness = constrain(brightness, 0, 255);
+      brightness = constrain(brightness, 0, maxBrightness);
     }
 
     pixels.setBrightness(brightness);
@@ -106,7 +107,7 @@ bool breatheStep(BreatheMode mode, unsigned long interval = 5) {
     pixels.show();
   }
 
-  if (mode == BREATHE_IN) return brightness != 255;
+  if (mode == BREATHE_IN) return brightness != maxBrightness;
   if (mode == BREATHE_OUT) return brightness != 0;
 
   return true;
