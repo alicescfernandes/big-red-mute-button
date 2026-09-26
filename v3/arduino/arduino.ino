@@ -14,7 +14,7 @@ bool device_connected_state = false;
 volatile bool button_state = false;                   // state triggered phisically via button. written inside a interrupt
 volatile bool standby_state = false;                  // sleep state only activated via software. written inside a interrupt
 volatile bool write_to_characteristic_state = false;  // written inside a interrupt
-volatile int standby_state = false;                  // sleep state only activated via software. written inside a interrupt
+volatile int brightness_state;                 // sleep state only activated via software. written inside a interrupt
 
 
 int blink_cycles_done = 0;     // number of completed on-off blinks
@@ -22,6 +22,25 @@ bool blink_led_state = false;  // current state within a cycle
 unsigned long blink_last_changed = 0;
 
 
+int getUserBrightness() {
+  if(brightness_state){
+    return brightness_state;
+  }
+  
+  int value = preferences.getInt(
+    PREFERENCE_KEY,
+    PREFERENCE_DEFAULT_VALUE
+  );
+
+  brightness_state = constrain(value, 0, 255);
+  return brightness_state;
+}
+
+void setUserBrightness(int value) {
+  int safe_value = constrain(value, 0, 255);
+  preferences.putInt(PREFERENCE_KEY, safe_value);
+  brightness_state = value;
+}
 
 int read_value(NimBLECharacteristic *c) {
   time_t timestamp;
@@ -160,12 +179,11 @@ public:
 
     if (pCharacteristic->getUUID().equals(NimBLEUUID(BRIGHTNESS_CHARACTERISTIC))) {
       // handle standby write
-      int currentValue = preferences.getInt(PREFERENCE_KEY, PREFERENCE_DEFAULT_VALUE); 
+      int currentValue = getUserBrightness(); 
       if (value.size() > 0 && currentValue != value[0]) {
-        Serial.print("Written new brightness:");
+        setUserBrightness(value[0]);
+        Serial.print("Attepmted to write new brightness:");
         Serial.print(value[0]);
-
-        preferences.putInt(PREFERENCE_KEY, value[0]);
       }
     }
   }
@@ -309,6 +327,11 @@ bool blinkTwice() {
 
 void setup() {
   Serial.begin(115200);
+
+  // Setup the preferences
+  preferences.begin("red-button", false);
+  getUserBrightness(); // initialize the variable
+
   NimBLEDevice::init(NAME);
 
   pinMode(RED_BTN, INPUT_PULLUP);
@@ -349,8 +372,6 @@ void setup() {
   mcuPixel.begin();
   mcuPixel.setBrightness(64);  // Approximately 25%
 
-  // Setup the preferences
-  preferences.begin("red-button", false);
 }
 
 

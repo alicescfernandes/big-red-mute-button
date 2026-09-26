@@ -15,16 +15,6 @@ enum AnimationMode {
 
 const int CYCLES_PER_ANIMATION = 15;
 
-
-int getUserBrightness() {
-  int value = preferences.getInt(
-    PREFERENCE_KEY,
-    PREFERENCE_DEFAULT_VALUE
-  );
-
-  return constrain(value, 0, 255);
-}
-
 int applyBrightness(int level) {
   return level * getUserBrightness() / 255;
 }
