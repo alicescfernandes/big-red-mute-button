@@ -2,6 +2,10 @@
 
 #define NEOPIXEL_PIN 4
 #define NUMPIXELS 12
+#define MCU_PIN 38
+#define PREFERENCE_KEY "brightness"
+#define PREFERENCE_DEFAULT_VALUE 255
+
 
 const uint8_t hidReportDescriptor[] = {
   0x05, 0x01,  // Usage Page (Generic Desktop)
@@ -34,9 +38,13 @@ const uint8_t hidReportDescriptor[] = {
 
 Adafruit_NeoPixel pixels(NUMPIXELS, NEOPIXEL_PIN, NEO_GRB + NEO_KHZ800);
 
+Adafruit_NeoPixel mcuPixel(1, MCU_PIN, NEO_GRB + NEO_KHZ800);
+
 NimBLEServer *ble_server;
 NimBLECharacteristic *btn_characteristic;
 NimBLECharacteristic *standby_characteristic;
+NimBLECharacteristic *brightness_characterstic;
+
 
 
 enum BreatheMode { BREATHE_IN,
@@ -47,3 +55,5 @@ int brightness = 0;
 int step = 1;
 
 const unsigned long blinkInterval = 150;  // ms per half-cycle (on or off)
+
+Preferences preferences;

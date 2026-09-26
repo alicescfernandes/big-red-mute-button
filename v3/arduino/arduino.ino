@@ -1,6 +1,6 @@
 #include <NimBLEDevice.h>
 #include <Adafruit_NeoPixel.h>
-
+#include <Preferences.h>
 #include "secrets.h"
 #include "constants.h"
 
@@ -11,24 +11,24 @@ static unsigned long debounce_delay = 260;  // the debounce time; increase if th
 bool animate_button_state = false;
 bool device_connected_state = false;
 // https://forum.arduino.cc/t/explanation-of-volatile/402932
-volatile bool button_state = false; // state triggered phisically via button. written inside a interrupt
-volatile bool standby_state = false; // sleep state only activated via software. written inside a interrupt
-volatile bool write_to_characteristic_state = false; // written inside a interrupt
+volatile bool button_state = false;                   // state triggered phisically via button. written inside a interrupt
+volatile bool standby_state = false;                  // sleep state only activated via software. written inside a interrupt
+volatile bool write_to_characteristic_state = false;  // written inside a interrupt
+volatile int standby_state = false;                  // sleep state only activated via software. written inside a interrupt
 
 
-int blink_cycles_done = 0;  // number of completed on-off blinks
+int blink_cycles_done = 0;     // number of completed on-off blinks
 bool blink_led_state = false;  // current state within a cycle
 unsigned long blink_last_changed = 0;
 
 
-/**
+
 int read_value(NimBLECharacteristic *c) {
   time_t timestamp;
   NimBLEAttValue stuff = btn_characteristic->getValue();  // timestamp optional
   const uint8_t *value = stuff.getValue(&timestamp);
   return (int)value[0];
 }
-*/
 
 void write_value(NimBLECharacteristic *c, int value) {
   c->setValue(byte(value));
@@ -93,7 +93,7 @@ bool breatheStep(BreatheMode mode, unsigned long interval = 5) {
   return true;
 }
 
-void resetState(){
+void resetState() {
   animate_button_state = false;
   blink_cycles_done = 0;
   blink_led_state = false;
@@ -101,10 +101,12 @@ void resetState(){
   write_to_characteristic_state = false;
   standby_state = false;
 
-  // resets the bluetooth state
-  write_value(btn_characteristic,0);
-  write_value(standby_characteristic,0);
+  // Reset pixel colors
+  updateNeoPixelBrightness();
 
+  // resets the bluetooth state
+  write_value(btn_characteristic, 0);
+  write_value(standby_characteristic, 0);
 }
 
 class ServerCallbacks : public NimBLEServerCallbacks {
@@ -129,7 +131,7 @@ public:
 };
 
 
-class BoxWriteCallbacks : public NimBLECharacteristicCallbacks {
+class RedButtonCallbacks : public NimBLECharacteristicCallbacks {
 public:
   void onWrite(
     NimBLECharacteristic *pCharacteristic,
@@ -140,17 +142,31 @@ public:
 
     if (pCharacteristic->getUUID().equals(NimBLEUUID(BTN_CHARACTERISTIC)) && standby_state == false) {
       // handle button write
-        if (value.size() > 0) {
-          button_state = value[0] != 0;
-          animate_button_state = true;
-        }
-    } 
-    
+      if (value.size() > 0) {
+        button_state = value[0] != 0;
+        animate_button_state = true;
+      }
+    }
+
     if (pCharacteristic->getUUID().equals(NimBLEUUID(STANDBY_CHARACTERISTIC))) {
       // handle standby write
       if (value.size() > 0) {
-          standby_state = value[0] != 0;        
+        standby_state = value[0] != 0;      }
+        if(standby_state){
+          // update the neo pixel brigthess outside of the loop
+          updateNeoPixelBrightness();
         }
+    }
+
+    if (pCharacteristic->getUUID().equals(NimBLEUUID(BRIGHTNESS_CHARACTERISTIC))) {
+      // handle standby write
+      int currentValue = preferences.getInt(PREFERENCE_KEY, PREFERENCE_DEFAULT_VALUE); 
+      if (value.size() > 0 && currentValue != value[0]) {
+        Serial.print("Written new brightness:");
+        Serial.print(value[0]);
+
+        preferences.putInt(PREFERENCE_KEY, value[0]);
+      }
     }
   }
 };
@@ -198,23 +214,35 @@ void create_dis_service() {
 
 void create_box_service() {
   NimBLEService *service = ble_server->createService(BUTTON_SERVICE_UUID);
-  btn_characteristic = service->createCharacteristic(BTN_CHARACTERISTIC, NIMBLE_PROPERTY::READ | NIMBLE_PROPERTY::WRITE | NIMBLE_PROPERTY::READ_ENC | NIMBLE_PROPERTY::WRITE_ENC | NIMBLE_PROPERTY::READ_AUTHEN | NIMBLE_PROPERTY::WRITE_AUTHEN | NIMBLE_PROPERTY::NOTIFY);
+  NimBLECharacteristicCallbacks* redButtonCallbacks = new RedButtonCallbacks();
 
-  // btn_characteristic = service->createCharacteristic(BTN_CHARACTERISTIC, NIMBLE_PROPERTY::READ | NIMBLE_PROPERTY::WRITE | NIMBLE_PROPERTY::NOTIFY);
+  // Button status
+  btn_characteristic = service->createCharacteristic(BTN_CHARACTERISTIC, NIMBLE_PROPERTY::READ | NIMBLE_PROPERTY::WRITE | NIMBLE_PROPERTY::READ_ENC | NIMBLE_PROPERTY::WRITE_ENC | NIMBLE_PROPERTY::READ_AUTHEN | NIMBLE_PROPERTY::WRITE_AUTHEN | NIMBLE_PROPERTY::NOTIFY);
   btn_characteristic->setValue(byte(0));  // Clients can subscribe to this, and update as they wish
-  btn_characteristic->setCallbacks(new BoxWriteCallbacks());
+  btn_characteristic->setCallbacks(redButtonCallbacks);
 
   // Add the 0x2901 User Description descriptor
   NimBLEDescriptor *btn_description = btn_characteristic->createDescriptor("2901", NIMBLE_PROPERTY::READ | NIMBLE_PROPERTY::READ_ENC, 100);
   btn_description->setValue("Button  status (pressed / not pressed)");
 
+
+  //  Control Standby animation
   standby_characteristic = service->createCharacteristic(STANDBY_CHARACTERISTIC, NIMBLE_PROPERTY::READ | NIMBLE_PROPERTY::WRITE | NIMBLE_PROPERTY::READ_ENC | NIMBLE_PROPERTY::WRITE_ENC | NIMBLE_PROPERTY::READ_AUTHEN | NIMBLE_PROPERTY::WRITE_AUTHEN | NIMBLE_PROPERTY::NOTIFY);
   standby_characteristic->setValue(byte(0));  // Clients can subscribe to this, and update as they wish
-  standby_characteristic->setCallbacks(new BoxWriteCallbacks());
+  standby_characteristic->setCallbacks(redButtonCallbacks);
 
   // Add the 0x2901 User Description descriptor
   NimBLEDescriptor *standby_description = standby_characteristic->createDescriptor("2901", NIMBLE_PROPERTY::READ | NIMBLE_PROPERTY::READ_ENC, 100);
-  standby_description->setValue("Standby Mode");
+  standby_description->setValue("Standby Mode (0 or 1)");
+
+  // Control LED brightness
+  brightness_characterstic = service->createCharacteristic(BRIGHTNESS_CHARACTERISTIC, NIMBLE_PROPERTY::READ | NIMBLE_PROPERTY::WRITE | NIMBLE_PROPERTY::READ_ENC | NIMBLE_PROPERTY::WRITE_ENC | NIMBLE_PROPERTY::READ_AUTHEN | NIMBLE_PROPERTY::WRITE_AUTHEN | NIMBLE_PROPERTY::NOTIFY);
+  brightness_characterstic->setValue(getUserBrightness());  // Clients can subscribe to this, brightness_characterstic update as they wish
+  brightness_characterstic->setCallbacks(redButtonCallbacks);
+
+  // Add the 0x2901 User Description descriptor
+  NimBLEDescriptor *brightness_description = brightness_characterstic->createDescriptor("2901", NIMBLE_PROPERTY::READ | NIMBLE_PROPERTY::READ_ENC, 100);
+  brightness_description->setValue("Light Brightness (0-255)");
 
   service->start();
 }
@@ -229,18 +257,23 @@ void on_button_click() {
   }
 }
 
+void updateNeoPixelBrightness() {
+  pixels.setBrightness(getUserBrightness());
+}
+
 void setupNeoPixel() {
   pixels.begin();
-  pixels.setBrightness(0);
+  updateNeoPixelBrightness();
   pixels.show();
 }
+
 
 // Call this every loop() until it returns false (animation done)
 // Call every loop().
 // To start: blink_cycles_done = 0; blink_led_state = false;
 // Returns true while blinking, false when idle/done.
 void showAll() {
-  pixels.setBrightness(100);
+  updateNeoPixelBrightness();
   for (int i = 0; i < NUMPIXELS; i++) {
     pixels.setPixelColor(i, pixels.Color(255, 255, 255));
   }
@@ -311,16 +344,23 @@ void setup() {
   attachInterrupt(digitalPinToInterrupt(RED_BTN), on_button_click, RISING);
 
   setupNeoPixel();
+
+  // Setup the MCU pixel
+  mcuPixel.begin();
+  mcuPixel.setBrightness(64);  // Approximately 25%
+
+  // Setup the preferences
+  preferences.begin("red-button", false);
 }
 
 
 
 void loop() {
-
+  blinkMcuPixel(device_connected_state);
   /* #region Bluetooth Button */
   if (device_connected_state) {
 
-    if(blink_cycles_done < 2){
+    if (blink_cycles_done < 2) {
       blinkTwice();
     }
 
@@ -337,14 +377,15 @@ void loop() {
       animate_button_state = breatheStep(button_state ? BREATHE_IN : BREATHE_OUT, 1);
     }
 
-    if(standby_state){
+    if (standby_state) {
       updateStandbyAnimation();
     }
   }
   /* #endregion */
 
+  // use the standby animations as the "holding pattern" while we wait for connection
+  // the mcu's led will be the status LED instead
   if (!device_connected_state) {
-    breatheStep(BREATHE_IN_OUT);
+      updateStandbyAnimation();
   }
-
 }
